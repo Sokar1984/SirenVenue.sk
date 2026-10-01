@@ -39,6 +39,37 @@ a:not(.row-link):hover {
   transition: var(--m-focus);
 }
 
+/* ---- skip link ---- */
+
+/* First tab stop, parked out of the visual flow until it takes focus so the
+   landing page stays exactly as designed. `clip`/`clip-path` (not display or
+   visibility) keep it in the tab order and in the accessibility tree. */
+.skip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip:focus {
+  z-index: 10;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip: auto;
+  clip-path: none;
+  padding: 0.6rem 0.9rem;
+  background: var(--bg);
+  color: var(--fg);
+  border: 1px solid var(--line);
+  font-size: var(--fs-note);
+}
+
 ::selection {
   background: var(--fg);
   color: var(--bg);
@@ -47,6 +78,7 @@ a:not(.row-link):hover {
 /* ---- shell ---- */
 
 .shell {
+  position: relative;
   max-width: var(--maxw);
   margin: 0 auto;
   padding: var(--pad) var(--pad) 2rem;

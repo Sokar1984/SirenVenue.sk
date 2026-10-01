@@ -22,6 +22,10 @@ export default async function Home({
 
   return (
     <div className={`shell ${geist.variable}`}>
+      <a className="skip" href="#main">
+        Skip to main content
+      </a>
+
       <header className="head">
         <div className="mark">
           <span className="mark-name">SirenVenue</span>
@@ -36,7 +40,7 @@ export default async function Home({
                 key={candidate}
                 href={`/${candidate}`}
                 className={active ? "locale is-active" : "locale"}
-                aria-current={active ? "true" : undefined}
+                aria-current={active ? "page" : undefined}
               >
                 {localeLabel(candidate)}
               </Link>
@@ -49,14 +53,14 @@ export default async function Home({
         Software &amp; systems for live, venue, and&nbsp;gallery.
       </p>
 
-      <main>
+      <main id="main" tabIndex={-1}>
         <section className="index" aria-label="Work">
           <div className="index-head">
             <span className="label">Work</span>
             <span className="label">{works.length} systems</span>
           </div>
 
-          <ol className="rows">
+          <ol className="rows" role="list">
             {works.map((work, i) => {
               const role = work.role.replace(/_/g, " ");
               const repeatsRole =
@@ -64,7 +68,7 @@ export default async function Home({
                 work.descriptor.replace(/_/g, " ").trim().toLowerCase() ===
                   role.trim().toLowerCase();
               return (
-                <li className="row" key={work.slug}>
+                <li className="row" key={work.slug} role="listitem">
                   <a
                     className="row-link"
                     href={work.href}
