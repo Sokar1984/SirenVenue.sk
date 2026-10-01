@@ -3,8 +3,12 @@
   Curves traced from 20160121-DOT-logo-krivky.pdf, taken from
   dot-amb-2026/components/brand/DotMark.js so the two cannot drift.
 
-  Letters are drawn in the plaque foreground (#f4f4f5, --fg); the ring is the
+  Letters are drawn in the plaque foreground colour (#f4f4f5); the ring is the
   DOT. brand teal #00B7C9. On a #08080a field both pass 4.5:1.
+
+  Do not put CSS custom-property names in this or any comment here: XML forbids
+  a double hyphen inside a comment, and those token names contain one. Writing
+  them makes the whole file invalid, so it renders <img>-loaded but not parsed.
 -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 188.25 188.25" role="img" aria-label="DOT.">
   <path

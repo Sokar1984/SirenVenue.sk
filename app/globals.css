@@ -144,6 +144,25 @@ a:not(.row-link):hover {
   text-wrap: balance;
 }
 
+/* ---- work mark ----
+   DOT. Gallery is the only case page with an asset, so it is the only one that
+   draws a mark. It is a modest identifier, not a hero: the size rides the
+   colophon display token, the square ratio holds its box before paint, and it
+   is spaced by the shell's own flex gap like every other block. Decorative,
+   because the colophon beneath it already names the work. */
+
+.work-mark {
+  display: block;
+  width: calc(var(--fs-colophon) * 1.5);
+}
+
+.work-mark svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+}
+
 /* ---- note (used by not-found) ---- */
 
 .note {
