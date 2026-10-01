@@ -347,3 +347,114 @@ main {
     animation: none !important;
   }
 }
+
+/* ---- language control (modules/lang-switch) ----
+   Append-only: the switcher's own rules. Built entirely from modules/tokens —
+   no new values, no restructuring of the rules above. The global :focus-visible
+   ring (SOK-250) is intentionally left to apply to the trigger and options. */
+
+.lang-switch {
+  position: relative;
+}
+
+.lang-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem; /* 44px touch target */
+  padding: 0 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--fg);
+  font-family: inherit;
+  font-size: var(--fs-locales);
+  letter-spacing: 0.14em;
+  cursor: pointer;
+  transition: background-color var(--motion-fast), border-color var(--motion-fast);
+}
+
+.lang-trigger:hover {
+  background: var(--lift);
+}
+
+.lang-trigger[aria-expanded="true"] {
+  border-color: var(--dim);
+  background: var(--lift);
+}
+
+.lang-flag {
+  display: block;
+  flex: none;
+  width: 1.5rem;
+  height: 1rem;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.lang-code {
+  line-height: 1;
+}
+
+.lang-chevron {
+  flex: none;
+  width: 0.8rem;
+  height: 0.8rem;
+  color: var(--dim);
+  transition: transform var(--motion-fast), color var(--motion-fast);
+}
+
+.lang-chevron.is-open {
+  transform: rotate(180deg);
+}
+
+.lang-trigger[aria-expanded="true"] .lang-chevron {
+  color: var(--fg);
+}
+
+.lang-list {
+  position: absolute;
+  top: calc(100% + 0.35rem);
+  right: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  min-width: 100%;
+  margin: 0;
+  padding: 0.25rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--bg);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55);
+}
+
+.lang-option {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  min-height: 2.75rem; /* 44px touch target */
+  padding: 0 0.5rem;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--muted);
+  font-family: inherit;
+  font-size: var(--fs-locales);
+  letter-spacing: 0.14em;
+  text-align: left;
+  cursor: pointer;
+  transition: color var(--motion-fast), background-color var(--motion-fast);
+}
+
+.lang-option:hover,
+.lang-option:focus-visible {
+  background: var(--lift);
+  color: var(--fg);
+}
+
+/* The current locale stays visibly distinct in the list. */
+.lang-option[aria-selected="true"] {
+  color: var(--fg);
+  font-weight: 600;
+}
