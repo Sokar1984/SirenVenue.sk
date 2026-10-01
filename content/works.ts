@@ -1,8 +1,17 @@
+/**
+ * Portfolio works shown on the plaque grid.
+ *
+ * `role` uses the vocabulary the CEO vision specifies for work/case entries:
+ * **product / live / gallery ops / systems**. Do not invent descriptive labels
+ * here — the vision names the terms.
+ *
+ * `href` values are probed before being added; a dead one is a bug, not a detail.
+ */
 export type Work = {
   /** Product name as it appears on the grid. */
   name: string;
-  /** Short label — a few words, not a sentence. */
-  role: string;
+  /** One of: product | live | gallery ops | systems */
+  role: "product" | "live" | "gallery ops" | "systems";
   /** Live URL that answers. Probed before adding. */
   href: string;
   /** Public repo only. Omit when private. */
@@ -18,14 +27,14 @@ export type Work = {
 export const works: Work[] = [
   {
     name: "SirenVenue.com",
-    role: "Live venue",
+    role: "product",
     href: "https://sirenvenue.com",
     stack: "Next.js · Prisma · Vercel Blob",
     status: "Live",
   },
   {
     name: "BlinkLive",
-    role: "Live camera",
+    role: "live",
     href: "https://blinklive.app",
     stack: "Next.js · LiveKit",
     status: "Live",
@@ -33,7 +42,7 @@ export const works: Work[] = [
   },
   {
     name: "DOT. Gallery",
-    role: "Gallery systems",
+    role: "gallery ops",
     href: "https://dotgallery.sk",
     repo: "https://github.com/Sokar1984/dot-contemporary",
     stack: "Next.js · TypeScript",
@@ -41,7 +50,7 @@ export const works: Work[] = [
   },
   {
     name: "DOT. sklad",
-    role: "Staff warehouse",
+    role: "gallery ops",
     href: "https://sklad.dotgallery.sk",
     stack: "Next.js 15 · TypeScript · Postgres / Prisma",
     status: "Live in production",
@@ -50,7 +59,7 @@ export const works: Work[] = [
   },
   {
     name: "DOT. AMB 2026",
-    role: "Art Market Budapest 2026",
+    role: "gallery ops",
     href: "https://dotgallery.sk/art-market-budapest",
     stack: "Next.js",
     status: "Live",
