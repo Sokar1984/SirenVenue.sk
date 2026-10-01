@@ -27,9 +27,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# env
-.env*.local
+# env — secrets stay out, the template stays in
 .env
+.env.*
+!.env.example
 
 # vercel
 .vercel
@@ -37,4 +38,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-.env*
