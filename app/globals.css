@@ -1,22 +1,35 @@
 :root {
   color-scheme: dark;
-  --bg: #0a0a0a;
-  --fg: #f2f2f2;
-  --muted: #8a8a8a;
-  --line: #222;
+
+  --bg: #08080a;
+  --fg: #f4f4f5;
+  --muted: #7c7c84;
+  --dim: #4b4b52;
+  --line: #1d1d21;
+  --lift: rgba(255, 255, 255, 0.035);
+
+  --pad: clamp(1.25rem, 5vw, 3.5rem);
+  --maxw: 68rem;
 }
 
 * {
   box-sizing: border-box;
 }
 
-html,
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   margin: 0;
-  min-height: 100%;
   background: var(--bg);
   color: var(--fg);
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  font-feature-settings: "kern" 1, "calt" 1, "tnum" 1;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 a {
@@ -26,4 +39,216 @@ a {
 
 a:hover {
   text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+:focus-visible {
+  outline: 1px solid var(--fg);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+/* ---- shell ---- */
+
+.shell {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: var(--pad) var(--pad) 2rem;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2.25rem, 6vw, 4.5rem);
+}
+
+/* ---- head ---- */
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  flex-wrap: wrap;
+}
+
+.mark {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.mark-name {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.mark-legal {
+  font-size: 0.75rem;
+  color: var(--dim);
+}
+
+.locales {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+}
+
+.locale {
+  color: var(--dim);
+}
+
+.locale.is-active {
+  color: var(--fg);
+}
+
+/* ---- colophon ---- */
+
+.colophon {
+  margin: 0;
+  max-width: 26ch;
+  font-size: clamp(1.15rem, 2.6vw, 1.5rem);
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+}
+
+/* ---- index ---- */
+
+.index {
+  border-top: 1px solid var(--line);
+}
+
+.index-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 0.25rem;
+}
+
+.label {
+  font-size: 0.66rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.row + .row {
+  border-top: 1px solid var(--line);
+}
+
+.row-link {
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr) minmax(0, 13rem) 9.5rem 1.25rem;
+  grid-template-areas: "no name role status arrow";
+  align-items: baseline;
+  gap: 1rem;
+  padding: 1.05rem 0.25rem;
+  transition: background-color 0.18s ease, padding-left 0.18s ease;
+}
+
+.row-link:hover {
+  background: var(--lift);
+  padding-left: 0.85rem;
+}
+
+.row-no {
+  grid-area: no;
+  color: var(--dim);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  font-variant-numeric: tabular-nums;
+}
+
+.row-name {
+  grid-area: name;
+  font-size: clamp(1.05rem, 1.7vw, 1.25rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.row-role {
+  grid-area: role;
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
+.row-status {
+  grid-area: status;
+  color: var(--dim);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.row-arrow {
+  grid-area: arrow;
+  justify-self: end;
+  color: var(--dim);
+  font-size: 0.8rem;
+}
+
+.row-link:hover .row-arrow {
+  color: var(--fg);
+}
+
+/* ---- foot ---- */
+
+.foot {
+  margin-top: auto;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem 2rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.5rem;
+}
+
+.legal {
+  color: var(--dim);
+}
+
+/* ---- narrow ---- */
+
+@media (max-width: 720px) {
+  .row-link {
+    grid-template-columns: 2.25rem minmax(0, 1fr) 1.25rem;
+    grid-template-areas:
+      "no name arrow"
+      ". role role"
+      ". status status";
+    row-gap: 0.3rem;
+    padding: 0.9rem 0.25rem;
+  }
+
+  .row-role {
+    font-size: 0.78rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
 }

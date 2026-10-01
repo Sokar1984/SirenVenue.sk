@@ -1,64 +1,75 @@
 import { works } from "@/content/works";
+import { company, contact } from "@/content/legal";
+
+/** Locale order is deliberate: SK first, Venezuelan Spanish kept as its own code. */
+const LOCALES = ["SK", "EN", "DE", "ES", "VE", "HU", "CS", "UK", "RU"];
+const ACTIVE_LOCALE = "SK";
 
 export default function Home() {
   return (
-    <main
-      style={{
-        maxWidth: 720,
-        margin: "0 auto",
-        padding: "4rem 1.5rem 3rem",
-        display: "flex",
-        flexDirection: "column",
-        gap: "3rem",
-        minHeight: "100vh",
-      }}
-    >
-      <header style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-        <h1 style={{ margin: 0, fontSize: "1.5rem", fontWeight: 600, letterSpacing: "-0.02em" }}>
-          SirenVenue
-        </h1>
-        <p style={{ margin: 0, color: "var(--muted)", maxWidth: "36ch", lineHeight: 1.5 }}>
-          Software &amp; systems for live, venue, and gallery.
-        </p>
+    <div className="shell">
+      <header className="head">
+        <div className="mark">
+          <span className="mark-name">SirenVenue</span>
+          <span className="mark-legal">s.r.o.</span>
+        </div>
+
+        {/* Visual only for now — i18n routing lands with the locale batch. */}
+        <nav className="locales" aria-label="Language">
+          {LOCALES.map((locale) => (
+            <span
+              key={locale}
+              className={locale === ACTIVE_LOCALE ? "locale is-active" : "locale"}
+            >
+              {locale}
+            </span>
+          ))}
+        </nav>
       </header>
 
-      <section aria-label="Selected work">
-        <ul style={{ listStyle: "none", margin: 0, padding: 0, borderTop: "1px solid var(--line)" }}>
-          {works.map((w) => (
-            <li
-              key={w.name}
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                gap: "1rem",
-                padding: "1rem 0",
-                borderBottom: "1px solid var(--line)",
-              }}
-            >
-              <a href={w.href} target="_blank" rel="noreferrer">
-                {w.name}
-              </a>
-              <span style={{ color: "var(--muted)", fontSize: "0.9rem" }}>{w.role}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <p className="colophon">Software &amp; systems for live, venue, and gallery.</p>
 
-      <footer
-        style={{
-          marginTop: "auto",
-          color: "var(--muted)",
-          fontSize: "0.85rem",
-          lineHeight: 1.6,
-          display: "flex",
-          flexDirection: "column",
-          gap: "0.25rem",
-        }}
-      >
-        <a href="mailto:hello@sirenvenue.sk">hello@sirenvenue.sk</a>
-        <span>Bratislava, Slovakia</span>
-        <span>SirenVenue s.r.o.</span>
+      <main>
+        <section className="index" aria-label="Work">
+          <div className="index-head">
+            <span className="label">Work</span>
+            <span className="label">{works.length} systems</span>
+          </div>
+
+          <ol className="rows">
+            {works.map((work, i) => (
+              <li className="row" key={work.name}>
+                <a
+                  className="row-link"
+                  href={work.href}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <span className="row-no">{String(i + 1).padStart(2, "0")}</span>
+                  <span className="row-name">{work.name}</span>
+                  <span className="row-role">{work.role}</span>
+                  <span className="row-status">{work.status ?? "—"}</span>
+                  <span className="row-arrow" aria-hidden="true">
+                    ↗
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </section>
+      </main>
+
+      <footer className="foot">
+        <div className="strip">
+          <a href={`mailto:${contact.email}`}>{contact.email}</a>
+          <span>{contact.city}</span>
+        </div>
+        <div className="strip legal">
+          <span>{company.name}</span>
+          <span>{company.seat}</span>
+          <span>IČO {company.ico}</span>
+        </div>
       </footer>
-    </main>
+    </div>
   );
 }
