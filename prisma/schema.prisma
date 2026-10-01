@@ -49,9 +49,12 @@ model Locale {
 }
 
 model Message {
-  key    String
-  locale String
-  value  String
+  key      String
+  locale   String
+  value    String
+  /// False until a human has read this row in its own language. Drafts seeded
+  /// for a locale we cannot yet vouch for never count as reviewed.
+  reviewed Boolean @default(false)
 
   @@unique([key, locale])
   @@index([locale])

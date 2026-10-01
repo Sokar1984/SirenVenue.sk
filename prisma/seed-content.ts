@@ -6,13 +6,20 @@
  * them through `modules/content`. The locale catalogue comes from the i18n
  * module's canonical order.
  *
+ * The chrome strings come from `modules/i18n/messages.ts` and are projected into
+ * `Message`. `sk` and `en` are authored by the project and seeded reviewed. The
+ * other seven locales are unreviewed drafts awaiting human review — an
+ * unreviewed draft in the right language beats an English fallback, and a
+ * wrong-language string is worse than either. Never edit a draft to English to
+ * make a check pass; declare it missing in the catalog instead.
+ *
  * Idempotent: every write is an upsert keyed by its natural key (`Work.slug`,
- * `WorkTranslation.(workId, locale)`, `Locale.code`).
+ * `WorkTranslation.(workId, locale)`, `Locale.code`, `Message.(key, locale)`).
  */
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@prisma/client";
 import { works } from "../content/works";
-import { locales } from "../modules/i18n";
+import { locales, messageRows } from "../modules/i18n";
 
 const connectionString = process.env.DATABASE_URL;
 if (!connectionString) {
@@ -105,6 +112,26 @@ async function main(): Promise<void> {
     });
   }
   console.log(`seeded ${locales.length} locales`);
+
+  // Chrome strings, one row per key per locale. `reviewed` is baked into the
+  // catalog: `sk`/`en` reviewed, the seven draft locales not. See the header.
+  const messages = messageRows();
+  for (const row of messages) {
+    await prisma.message.upsert({
+      where: { key_locale: { key: row.key, locale: row.locale } },
+      create: {
+        key: row.key,
+        locale: row.locale,
+        value: row.value,
+        reviewed: row.reviewed,
+      },
+      update: { value: row.value, reviewed: row.reviewed },
+    });
+  }
+  const unreviewed = messages.filter((row) => !row.reviewed).length;
+  console.log(
+    `seeded ${messages.length} messages (${unreviewed} unreviewed drafts)`,
+  );
 }
 
 main()
