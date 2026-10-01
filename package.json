@@ -9,7 +9,9 @@
     "start": "next start",
     "lint": "next lint",
     "db:migrate": "prisma migrate deploy --config prisma/prisma.config.ts",
-    "db:seed": "prisma db seed --config prisma/prisma.config.ts"
+    "db:seed": "prisma db seed --config prisma/prisma.config.ts",
+    "check:links": "node scripts/check-links.mjs",
+    "smoke": "node scripts/smoke.mjs"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.0",

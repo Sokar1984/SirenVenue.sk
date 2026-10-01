@@ -1,0 +1,55 @@
+name: gates
+
+# Our works are other teams' apps and they move without telling us. A
+# deploy-time-only check cannot see a tile rot between releases, so the link
+# integrity check also runs on a daily schedule.
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "17 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  links:
+    name: link integrity
+    runs-on: ubuntu-latest
+    # The link check must not block deployment: it reports, it does not gate.
+    # A dead tile fails this job loudly, but the workflow stays green so the
+    # deploy is never held behind an external service's outage.
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: check every external link
+        run: node scripts/check-links.mjs
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+  smoke:
+    name: home smoke
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: build, start, and assert the home page
+        run: node scripts/smoke.mjs
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
