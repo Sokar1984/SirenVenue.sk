@@ -1,12 +1,21 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { enabledLocales, isLocale } from "@/modules/i18n";
+import { organizationJsonLd, pageMetadata } from "@/modules/seo";
 import "../globals.css";
 
-export const metadata: Metadata = {
-  title: "SirenVenue",
-  description: "SirenVenue s.r.o. — software & systems",
-};
+/** Per-locale title/description, `og:locale`, and hreflang alternates. */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) {
+    return {};
+  }
+  return pageMetadata(locale);
+}
 
 /** Only the enabled locales exist; anything else is a 404, never a fallback. */
 export const dynamicParams = false;
@@ -29,7 +38,15 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale}>
-      <body>{children}</body>
+      <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationJsonLd()),
+          }}
+        />
+        {children}
+      </body>
     </html>
   );
 }
