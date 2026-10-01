@@ -18,3 +18,10 @@ Hermes bot: **Siren.sk** (`hermes -p siren-sk`).
 npm install
 npm run dev
 ```
+
+## Modules
+
+Each module owns its directory and exposes exactly one public entry; nothing imports another module's internals.
+If it can be a module, write it as a module with its own on/off or fail-off; adding a module is copying the shape.
+Modules live under `modules/`, each with one public entry point.
+See [MODULES.md](./MODULES.md) for the inventory.
