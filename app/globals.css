@@ -13,7 +13,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--fg);
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: var(--font-sans, var(--font-fallback));
   font-size: var(--fs-body);
   line-height: 1.5;
   font-feature-settings: "kern" 1, "calt" 1, "tnum" 1;
@@ -51,7 +51,8 @@ a:hover {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  gap: clamp(2.25rem, 6vw, 4.5rem);
+  gap: var(--shell-gap);
+  font-family: var(--font-sans, var(--font-fallback));
 }
 
 /* ---- head ---- */
@@ -101,10 +102,12 @@ a:hover {
 
 .colophon {
   margin: 0;
-  max-width: 26ch;
+  max-width: 24ch;
   font-size: var(--fs-colophon);
-  line-height: 1.25;
-  letter-spacing: -0.025em;
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
 }
 
 /* ---- note (used by not-found) ---- */
@@ -125,8 +128,16 @@ a:hover {
 
 /* ---- index ---- */
 
+main {
+  flex: 1;
+  display: flex;
+}
+
 .index {
   border-top: 1px solid var(--line);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .index-head {
@@ -147,19 +158,34 @@ a:hover {
   list-style: none;
   margin: 0;
   padding: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   animation: var(--m-view-enter);
+}
+
+.row {
+  flex: 1;
+  display: flex;
 }
 
 .row + .row {
   border-top: 1px solid var(--line);
 }
 
+/* Name, role and descriptor sit as one left-anchored block; the flexible
+   empty track keeps the arrow on the right edge. Every descriptor track is
+   `max-content`, so a descriptor can never wrap. */
 .row-link {
+  flex: 1;
   display: grid;
-  grid-template-columns: 3rem minmax(0, 1fr) minmax(0, 13rem) 9.5rem 1.25rem;
-  grid-template-areas: "no name role status arrow";
+  grid-template-columns:
+    2.75rem max-content max-content minmax(16rem, max-content) minmax(0, 1fr)
+    1.25rem;
+  grid-template-areas: "no name role status . arrow";
   align-items: baseline;
-  gap: 1rem;
+  align-content: center;
+  column-gap: clamp(0.75rem, 1.5vw, 1.25rem);
   padding: 1.05rem 0.25rem;
   transition: var(--m-row-lift);
 }
@@ -197,6 +223,7 @@ a:hover {
   font-size: var(--fs-row-descriptor);
   letter-spacing: 0.12em;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .row-arrow {
@@ -237,6 +264,11 @@ a:hover {
 /* ---- narrow ---- */
 
 @media (max-width: 720px) {
+  /* Phone keeps its natural three-line rows; only the desktop index flexes. */
+  .row {
+    flex: none;
+  }
+
   .row-link {
     grid-template-columns: 2.25rem minmax(0, 1fr) 1.25rem;
     grid-template-areas:
@@ -244,11 +276,16 @@ a:hover {
       ". role role"
       ". status status";
     row-gap: 0.3rem;
+    align-content: normal;
     padding: 0.9rem 0.25rem;
   }
 
   .row-role {
     font-size: var(--fs-row-role-narrow);
+  }
+
+  .row-descriptor {
+    white-space: normal;
   }
 }
 

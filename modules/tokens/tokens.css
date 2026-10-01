@@ -20,16 +20,24 @@
   --line: #232329;
   --lift: rgba(255, 255, 255, 0.035);
 
-  /* Type scale */
+  /* Type family. `--font-sans` is declared only by modules/tokens/font.ts
+     (next/font, self-hosted); this fallback is what surfaces without the font
+     class use, so the family still swaps from modules/tokens alone. */
+  --font-fallback: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+
+  /* Type scale. Two display steps (colophon > row name) and a small, tracked
+     label tier. The index must command the page, so the display contrast is
+     wide on purpose. */
   --fs-body: 16px;
   --fs-mark-name: 1rem;
   --fs-mark-legal: 0.78rem;
   --fs-locales: 0.72rem;
-  --fs-colophon: clamp(1.15rem, 2.6vw, 1.5rem);
+  --fs-colophon: clamp(1.75rem, 3.2vw, 2.5rem);
   --fs-note: 0.9rem;
   --fs-label: 0.7rem;
   --fs-row-no: 0.72rem;
-  --fs-row-name: clamp(1.05rem, 1.7vw, 1.25rem);
+  --fs-row-name: clamp(1.25rem, 2vw, 1.6rem);
   --fs-row-role: 0.84rem;
   --fs-row-descriptor: 0.7rem;
   --fs-row-arrow: 0.8rem;
@@ -39,6 +47,7 @@
   /* Spacing */
   --pad: clamp(1.25rem, 5vw, 3.5rem);
   --maxw: 68rem;
+  --shell-gap: clamp(1.5rem, 3.5vw, 3rem);
 
   /* Motion */
   --motion-fast: 0.18s ease;

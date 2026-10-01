@@ -5,6 +5,9 @@
  * same values the browser consumes. This is the only file other modules may
  * import from.
  */
+/** Re-exported so the family is declared once, in modules/tokens/font.ts. */
+export { geist } from "./font";
+
 export const tokens = {
   color: {
     bg: "#08080a",
@@ -15,15 +18,16 @@ export const tokens = {
     lift: "rgba(255, 255, 255, 0.035)",
   },
   font: {
+    family: "var(--font-sans)",
     body: "16px",
     markName: "1rem",
     markLegal: "0.78rem",
     locales: "0.72rem",
-    colophon: "clamp(1.15rem, 2.6vw, 1.5rem)",
+    colophon: "clamp(1.75rem, 3.2vw, 2.5rem)",
     note: "0.9rem",
     label: "0.7rem",
     rowNo: "0.72rem",
-    rowName: "clamp(1.05rem, 1.7vw, 1.25rem)",
+    rowName: "clamp(1.25rem, 2vw, 1.6rem)",
     rowRole: "0.84rem",
     rowDescriptor: "0.7rem",
     rowArrow: "0.8rem",
@@ -33,6 +37,7 @@ export const tokens = {
   space: {
     pad: "clamp(1.25rem, 5vw, 3.5rem)",
     maxw: "68rem",
+    shellGap: "clamp(1.5rem, 3.5vw, 3rem)",
   },
   motion: {
     fast: "0.18s ease",

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { works } from "@/content/works";
 import { company, contact } from "@/content/legal";
 import { enabledLocales, isLocale, localeLabel } from "@/modules/i18n";
+import { geist } from "@/modules/tokens";
 
 export default async function Home({
   params,
@@ -15,7 +16,7 @@ export default async function Home({
   }
 
   return (
-    <div className="shell">
+    <div className={`shell ${geist.variable}`}>
       <header className="head">
         <div className="mark">
           <span className="mark-name">SirenVenue</span>
@@ -39,7 +40,9 @@ export default async function Home({
         </nav>
       </header>
 
-      <p className="colophon">Software &amp; systems for live, venue, and gallery.</p>
+      <p className="colophon">
+        Software &amp; systems for live, venue, and&nbsp;gallery.
+      </p>
 
       <main>
         <section className="index" aria-label="Work">
