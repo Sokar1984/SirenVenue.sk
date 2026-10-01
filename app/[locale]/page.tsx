@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { works } from "@/content/works";
+import { getWorks } from "@/modules/content";
 import { company, contact } from "@/content/legal";
 import { enabledLocales, isLocale, localeLabel } from "@/modules/i18n";
 import { geist } from "@/modules/tokens";
@@ -14,6 +14,11 @@ export default async function Home({
   if (!isLocale(locale)) {
     notFound();
   }
+
+  // The index is a shell. If the content database is unreachable we render it
+  // empty rather than failing the page or reaching for the seed file; see the
+  // outage policy documented in `modules/content`.
+  const works = await getWorks(locale).catch(() => []);
 
   return (
     <div className={`shell ${geist.variable}`}>
@@ -52,28 +57,37 @@ export default async function Home({
           </div>
 
           <ol className="rows">
-            {works.map((work, i) => (
-              <li className="row" key={work.name}>
-                <a
-                  className="row-link"
-                  href={work.href}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <span className="row-no">{String(i + 1).padStart(2, "0")}</span>
-                  <span className="row-name">{work.name}</span>
-                  <span className="row-meta">
-                    <span className="row-role">{work.role}</span>
-                    {work.descriptor ? (
-                      <span className="row-descriptor">{work.descriptor}</span>
-                    ) : null}
-                  </span>
-                  <span className="row-arrow" aria-hidden="true">
-                    ↗
-                  </span>
-                </a>
-              </li>
-            ))}
+            {works.map((work, i) => {
+              const role = work.role.replace(/_/g, " ");
+              const repeatsRole =
+                work.descriptor !== null &&
+                work.descriptor.replace(/_/g, " ").trim().toLowerCase() ===
+                  role.trim().toLowerCase();
+              return (
+                <li className="row" key={work.slug}>
+                  <a
+                    className="row-link"
+                    href={work.href}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <span className="row-no">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="row-name">{work.name}</span>
+                    <span className="row-meta">
+                      <span className="row-role">{role}</span>
+                      {work.descriptor && !repeatsRole ? (
+                        <span className="row-descriptor">{work.descriptor}</span>
+                      ) : null}
+                    </span>
+                    <span className="row-arrow" aria-hidden="true">
+                      ↗
+                    </span>
+                  </a>
+                </li>
+              );
+            })}
           </ol>
         </section>
       </main>
