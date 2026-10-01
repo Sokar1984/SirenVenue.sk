@@ -1,0 +1,9 @@
+<!--
+  Provisional favicon — created 2026-10-01.
+  Mirrors --bg (#08080a) and --fg (#f4f4f5) from modules/tokens.
+  To be replaced when a real mark exists. Not final.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="SirenVenue">
+  <rect width="32" height="32" fill="#08080a"/>
+  <rect x="7" y="7" width="18" height="18" fill="#f4f4f5"/>
+</svg>
