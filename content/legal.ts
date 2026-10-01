@@ -38,6 +38,12 @@ export const company = {
 } as const;
 
 export const contact = {
-  email: "info@sirenvenue.sk",
+  /**
+   * The mailbox is on the `.com` domain while the site is on `.sk` — a `.sk`
+   * mailbox does not exist yet. This is deliberate, not a mistake to "fix" by
+   * matching the hostname. When the `.sk` account is provisioned, this is a
+   * one-line change.
+   */
+  email: "info@sirenvenue.com",
   city: "Bratislava, Slovakia",
 } as const;
