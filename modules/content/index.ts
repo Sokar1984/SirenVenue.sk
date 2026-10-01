@@ -1,14 +1,15 @@
 /**
  * Public entry for the content module — the single read path from the database
  * to the surface. Nothing outside this module may talk to Prisma; everything
- * the site renders is read through `getWorks`, `getLegal`, or `getLocales`.
+ * the site renders is read through `getWorks`, `getWork`, `getLegal`, or
+ * `getLocales`.
  *
  * Caching
  * -------
  * Every read is wrapped in `unstable_cache` with a named tag so a mutation can
  * invalidate exactly the data it touched:
  *
- *   - `content:works`   — the published work rows (`getWorks`)
+ *   - `content:works`   — the published work rows (`getWorks`, `getWork`)
  *   - `content:legal`   — the static legal identity (`getLegal`)
  *   - `content:locales` — the locale catalogue (`getLocales`)
  *
@@ -140,6 +141,39 @@ const readWorks = cachedRead(
 /** All published works, translated into `locale`, in display order. */
 export function getWorks(locale: string): Promise<Work[]> {
   return readWorks(locale);
+}
+
+const readWork = cachedRead(
+  ["content", "work"],
+  [CONTENT_TAGS.works],
+  async (locale: string, slug: string): Promise<Work | null> => {
+    const row = await prisma.work.findFirst({
+      where: { slug, published: true },
+      include: { translations: true },
+    });
+    if (!row) return null;
+
+    const translation = pickTranslation(row.translations, locale);
+    return {
+      slug: row.slug,
+      name: translation?.name ?? row.slug,
+      role: row.role as WorkRole,
+      href: row.href,
+      repoUrl: row.repoUrl,
+      descriptor: translation?.descriptor ?? null,
+      sortOrder: row.sortOrder,
+    };
+  },
+);
+
+/**
+ * One published work by slug, translated into `locale`, or `null` when the
+ * slug is unknown or the work is unpublished. Shares the `content:works` cache
+ * tag with `getWorks`, so an edit invalidates the index and the case page
+ * together.
+ */
+export function getWork(locale: string, slug: string): Promise<Work | null> {
+  return readWork(locale, slug);
 }
 
 const readLegal = cachedRead(
