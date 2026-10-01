@@ -20,10 +20,12 @@ export {
   catalog,
   declaredMissing,
   isDeclaredMissing,
+  format,
   message,
   messageRows,
   type MessageKey,
   type MessageCatalog,
+  type MessageParams,
   type MessageRow,
   type DeclaredMissing,
 } from "./messages";

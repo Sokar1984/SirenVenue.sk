@@ -1,9 +1,7 @@
 import { notFound } from "next/navigation";
 import { getWorks } from "@/modules/content";
-import { company, contact } from "@/content/legal";
-import { isLocale } from "@/modules/i18n";
-import { LangSwitch } from "@/modules/lang-switch";
-import { geist } from "@/modules/tokens";
+import { isLocale, message } from "@/modules/i18n";
+import { Chrome } from "./layout";
 
 export default async function Home({
   params,
@@ -20,30 +18,24 @@ export default async function Home({
   // outage policy documented in `modules/content`.
   const works = await getWorks(locale).catch(() => []);
 
+  // Every chrome string comes from the catalog. A `null` result — an absent or
+  // declared-missing key — omits the element; English is never rendered in its
+  // place. Product names (`SirenVenue.com`, `BlinkLive`, `DOT. Gallery`) are
+  // brands and are not catalog entries.
+  const colophon = message(locale, "colophon");
+  const workLabel = message(locale, "work.label");
+  const workCount = message(locale, "work.count", { count: works.length });
+  const workAria = message(locale, "work.aria");
+
   return (
-    <div className={`shell ${geist.variable}`}>
-      <a className="skip" href="#main">
-        Skip to main content
-      </a>
-
-      <header className="head">
-        <div className="mark">
-          <span className="mark-name">SirenVenue</span>
-          <span className="mark-legal">s.r.o.</span>
-        </div>
-
-        <LangSwitch locale={locale} />
-      </header>
-
-      <p className="colophon">
-        Software &amp; systems for live, venue, and&nbsp;gallery.
-      </p>
+    <Chrome locale={locale} path="" home>
+      {colophon ? <p className="colophon">{colophon}</p> : null}
 
       <main id="main" tabIndex={-1}>
-        <section className="index" aria-label="Work">
+        <section className="index" aria-label={workAria ?? undefined}>
           <div className="index-head">
-            <span className="label">Work</span>
-            <span className="label">{works.length} systems</span>
+            {workLabel ? <span className="label">{workLabel}</span> : null}
+            {workCount ? <span className="label">{workCount}</span> : null}
           </div>
 
           <ol className="rows" role="list">
@@ -81,18 +73,6 @@ export default async function Home({
           </ol>
         </section>
       </main>
-
-      <footer className="foot">
-        <div className="strip">
-          <a href={`mailto:${contact.email}`}>{contact.email}</a>
-          <span>{contact.city}</span>
-        </div>
-        <div className="strip legal">
-          <span>{company.name}</span>
-          <span>{company.seat}</span>
-          <span>IČO {company.ico}</span>
-        </div>
-      </footer>
-    </div>
+    </Chrome>
   );
 }

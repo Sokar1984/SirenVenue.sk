@@ -1,10 +1,7 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getWork, getWorks } from "@/modules/content";
-import { company, contact } from "@/content/legal";
 import { enabledLocales, isLocale } from "@/modules/i18n";
-import { LangSwitch } from "@/modules/lang-switch";
-import { geist } from "@/modules/tokens";
+import { Chrome } from "../../layout";
 
 /**
  * A case page exists only to hold what the index row cannot: the work's own
@@ -39,23 +36,10 @@ export default async function Work({
 
   const role = work.role.replace(/_/g, " ");
 
+  // `work.name` is a product brand, identical in every locale, so it is the
+  // colophon and the section's accessible name, not a catalog entry.
   return (
-    <div className={`shell ${geist.variable}`}>
-      <a className="skip" href="#main">
-        Skip to main content
-      </a>
-
-      <header className="head">
-        <div className="mark">
-          <Link className="mark-name" href={`/${locale}`}>
-            SirenVenue
-          </Link>
-          <span className="mark-legal">s.r.o.</span>
-        </div>
-
-        <LangSwitch locale={locale} path={`/work/${work.slug}`} />
-      </header>
-
+    <Chrome locale={locale} path={`/work/${work.slug}`}>
       <p className="colophon">{work.name}</p>
 
       <main id="main" tabIndex={-1}>
@@ -71,18 +55,6 @@ export default async function Work({
           </p>
         </section>
       </main>
-
-      <footer className="foot">
-        <div className="strip">
-          <a href={`mailto:${contact.email}`}>{contact.email}</a>
-          <span>{contact.city}</span>
-        </div>
-        <div className="strip legal">
-          <span>{company.name}</span>
-          <span>{company.seat}</span>
-          <span>IČO {company.ico}</span>
-        </div>
-      </footer>
-    </div>
+    </Chrome>
   );
 }

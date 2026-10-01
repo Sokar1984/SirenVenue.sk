@@ -11,10 +11,21 @@
  *
  * Where the strings live at runtime
  * ---------------------------------
- * This module is the authored source. `prisma/seed-content.ts` projects every
- * row here into the `messages` table (`key`, `locale`, `value`, `reviewed`),
- * which is the table the site reads. The gate in `scripts/check-messages.mjs`
- * reads this module directly so it stays dependency-free and CI-runnable.
+ * This module is the single runtime source for the chrome. It is also the
+ * authored input `prisma/seed-content.ts` projects into the `messages` table
+ * (`key`, `locale`, `value`, `reviewed`) for machine consumers, exactly as
+ * `content/works.ts` seeds the `Work` table.
+ *
+ * The chrome deliberately reads this module and not that table. The shell must
+ * render when Postgres is down (see the outage policy in `modules/content`), and
+ * the render policy below — a declared-missing key renders nothing — is stated
+ * only here: the table has no notion of a declaration, and the seed projects
+ * rows without ever deleting one. `modules/content` owns the only Prisma client,
+ * so the chrome cannot consult the table without opening a second one. Chosen:
+ * one runtime source, this file. The table remains seed output, not a read path.
+ *
+ * The gate in `scripts/check-messages.mjs` reads this module directly so it
+ * stays dependency-free and CI-runnable.
  *
  * The review flag
  * ---------------
@@ -47,6 +58,7 @@ import type { Locale } from "./locales";
 
 /** Every translatable key. Keys are added only when a surface uses them. */
 export const messageKeys = [
+  "skip",
   "colophon",
   "work.label",
   "work.count",
@@ -73,6 +85,7 @@ export type MessageCatalog = Record<
  */
 export const catalog: MessageCatalog = {
   sk: {
+    skip: "Prejsť na hlavný obsah",
     colophon: "Softvér a systémy pre live, venue a galérie.",
     "work.label": "Práce",
     "work.count": "{count} systémov",
@@ -83,6 +96,7 @@ export const catalog: MessageCatalog = {
       "Odkaz je zastaraný alebo nikdy nebol náš. Každý produkt, ktorý vydávame, odkazuje späť na sirenvenue.sk — toto je tá stránka.",
   },
   en: {
+    skip: "Skip to main content",
     colophon: "Software & systems for live, venue, and gallery.",
     "work.label": "Work",
     "work.count": "{count} systems",
@@ -93,6 +107,7 @@ export const catalog: MessageCatalog = {
       "The link is out of date, or it was never ours. Every product we ship links back to sirenvenue.sk — this is that page.",
   },
   de: {
+    skip: "Zum Hauptinhalt springen",
     colophon: "Software & Systeme für Live, Venue und Galerie.",
     "work.label": "Arbeiten",
     "work.count": "{count} Systeme",
@@ -103,6 +118,7 @@ export const catalog: MessageCatalog = {
       "Der Link ist veraltet, oder er war nie unserer. Jedes Produkt, das wir ausliefern, verweist zurück auf sirenvenue.sk — das hier ist diese Seite.",
   },
   es: {
+    skip: "Saltar al contenido principal",
     colophon: "Software y sistemas para directo, recintos y galerías.",
     "work.label": "Trabajos",
     "work.count": "{count} sistemas",
@@ -113,6 +129,7 @@ export const catalog: MessageCatalog = {
       "El enlace está desactualizado o nunca fue nuestro. Cada producto que publicamos enlaza de vuelta a sirenvenue.sk — esta es esa página.",
   },
   "es-ve": {
+    skip: "Saltar al contenido principal",
     colophon: "Software y sistemas para vivo, recintos y galerías.",
     "work.label": "Trabajos",
     "work.count": "{count} sistemas",
@@ -123,6 +140,7 @@ export const catalog: MessageCatalog = {
       "El enlace está vencido o nunca fue nuestro. Cada producto que lanzamos enlaza de vuelta a sirenvenue.sk — esta es esa página.",
   },
   hu: {
+    skip: "Ugrás a fő tartalomra",
     colophon: "Szoftver és rendszerek élő, helyszíni és galéria használatra.",
     "work.label": "Munkák",
     "work.count": "{count} rendszer",
@@ -133,6 +151,7 @@ export const catalog: MessageCatalog = {
       "A link elavult, vagy soha nem is a miénk volt. Minden termék, amit kiadunk, visszamutat a sirenvenue.sk-ra — ez az az oldal.",
   },
   cs: {
+    skip: "Přeskočit na hlavní obsah",
     colophon: "Software a systémy pro live, venue a galerie.",
     "work.label": "Práce",
     "work.count": "{count} systémů",
@@ -143,6 +162,7 @@ export const catalog: MessageCatalog = {
       "Odkaz je zastaralý, nebo nikdy nebyl náš. Každý produkt, který vydáváme, odkazuje zpět na sirenvenue.sk — tohle je ta stránka.",
   },
   uk: {
+    skip: "Перейти до основного вмісту",
     colophon: "Софтвер і системи для сцени, майданчиків і галерей.",
     "work.label": "Роботи",
     "work.count": "{count} систем",
@@ -153,6 +173,7 @@ export const catalog: MessageCatalog = {
       "Посилання застаріло, або ніколи не було нашим. Кожен продукт, який ми випускаємо, веде назад на sirenvenue.sk — це та сторінка.",
   },
   ru: {
+    skip: "Перейти к основному содержанию",
     colophon: "Софт и системы для сцены, площадок и галерей.",
     "work.label": "Работы",
     "work.count": "{count} систем",
@@ -192,15 +213,45 @@ export function isDeclaredMissing(locale: Locale, key: MessageKey): boolean {
 }
 
 /**
- * Resolve one message for one locale. Returns the value, or `null` when the key
- * is missing or declared missing. It never falls back to another locale.
+ * Values a placeholder can be filled with. The catalog carries exactly one
+ * placeholder, `{count}`; a value is a template, never a formatted number.
+ */
+export type MessageParams = {
+  count?: number;
+};
+
+/**
+ * Fill a message template's placeholders. The only placeholder is `{count}`,
+ * replaced with `params.count`. A placeholder with no value collapses to the
+ * empty string rather than leaking `{count}` to the page. Placeholders are never
+ * translated; only the words around them are.
+ */
+export function format(value: string, params: MessageParams = {}): string {
+  return value.replace(/\{count\}/g, () =>
+    params.count === undefined ? "" : String(params.count),
+  );
+}
+
+/**
+ * Resolve one message for one locale. Returns the formatted value, or `null`
+ * when the key is missing or declared missing. It never falls back to another
+ * locale.
  *
  * This is the documented render policy: `null` means the caller renders
- * nothing — not English, not Slovak, not a placeholder.
+ * nothing — not English, not Slovak, not a placeholder. A declaration beats a
+ * stale value: if `(locale, key)` is declared missing, nothing is returned even
+ * if a value is still present.
  */
-export function message(locale: Locale, key: MessageKey): string | null {
+export function message(
+  locale: Locale,
+  key: MessageKey,
+  params: MessageParams = {},
+): string | null {
+  if (isDeclaredMissing(locale, key)) return null;
   const value = catalog[locale]?.[key];
-  return typeof value === "string" && value.length > 0 ? value : null;
+  return typeof value === "string" && value.length > 0
+    ? format(value, params)
+    : null;
 }
 
 /** A flattened row shaped exactly like the `Message` table. */
