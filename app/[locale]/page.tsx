@@ -1,8 +1,8 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getWorks } from "@/modules/content";
 import { company, contact } from "@/content/legal";
-import { enabledLocales, isLocale, localeLabel } from "@/modules/i18n";
+import { isLocale } from "@/modules/i18n";
+import { LangSwitch } from "@/modules/lang-switch";
 import { geist } from "@/modules/tokens";
 
 export default async function Home({
@@ -32,21 +32,7 @@ export default async function Home({
           <span className="mark-legal">s.r.o.</span>
         </div>
 
-        <nav className="locales" aria-label="Language">
-          {enabledLocales.map((candidate) => {
-            const active = candidate === locale;
-            return (
-              <Link
-                key={candidate}
-                href={`/${candidate}`}
-                className={active ? "locale is-active" : "locale"}
-                aria-current={active ? "page" : undefined}
-              >
-                {localeLabel(candidate)}
-              </Link>
-            );
-          })}
-        </nav>
+        <LangSwitch locale={locale} />
       </header>
 
       <p className="colophon">

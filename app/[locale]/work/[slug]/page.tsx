@@ -2,7 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getWork, getWorks } from "@/modules/content";
 import { company, contact } from "@/content/legal";
-import { enabledLocales, isLocale, localeLabel } from "@/modules/i18n";
+import { enabledLocales, isLocale } from "@/modules/i18n";
+import { LangSwitch } from "@/modules/lang-switch";
 import { geist } from "@/modules/tokens";
 
 /**
@@ -52,21 +53,7 @@ export default async function Work({
           <span className="mark-legal">s.r.o.</span>
         </div>
 
-        <nav className="locales" aria-label="Language">
-          {enabledLocales.map((candidate) => {
-            const active = candidate === locale;
-            return (
-              <Link
-                key={candidate}
-                href={`/${candidate}/work/${work.slug}`}
-                className={active ? "locale is-active" : "locale"}
-                aria-current={active ? "page" : undefined}
-              >
-                {localeLabel(candidate)}
-              </Link>
-            );
-          })}
-        </nav>
+        <LangSwitch locale={locale} path={`/work/${work.slug}`} />
       </header>
 
       <p className="colophon">{work.name}</p>
