@@ -1,24 +1,23 @@
 /**
- * The only facts the site may publish about the company.
+ * SEO site facts.
  *
- * Everything here is verified identity data; nothing inferred or invented may
- * be added (no registrations, VAT/DIČ, dates, ratings, or social profiles).
+ * The legal identity (`LEGAL_NAME`, `ICO`, `CONTACT_EMAIL`, `SEAT`) is derived
+ * from `content/legal.ts` — the single source of truth — so it is never
+ * restated here. Only `SITE_URL`, which is not legal identity, is owned by this
+ * module and lives in exactly this one place.
  */
+import { company, contact, registeredSeat } from "@/content/legal";
+
 export const SITE_URL = "https://sirenvenue.sk";
 
-export const LEGAL_NAME = "SirenVenue s. r. o.";
+export const LEGAL_NAME = company.name;
 
 /** Slovak company registration number (IČO). */
-export const ICO = "56302941";
+export const ICO = company.ico;
 
-export const CONTACT_EMAIL = "hello@sirenvenue.sk";
+export const CONTACT_EMAIL = contact.email;
 
-export const SEAT = {
-  street: "Jakubovo námestie 2556/3",
-  postalCode: "811 09",
-  city: "Bratislava",
-  country: "SK",
-} as const;
+export const SEAT = registeredSeat;
 
 /** Absolute URL for a locale's home page. */
 export function localeUrl(locale: string): string {
