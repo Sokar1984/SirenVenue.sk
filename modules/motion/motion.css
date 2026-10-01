@@ -1,0 +1,41 @@
+/*
+ * Motion module — named, plain-CSS transitions.
+ *
+ * Each name is one transition, composed only from duration/easing tokens in
+ * modules/tokens/tokens.css. The page surface opts in by referencing the name
+ * via var(); no JavaScript and no animation library run here, and nothing
+ * changes layout.
+ *
+ * Switch: `@media (prefers-reduced-motion: reduce)` collapses every name to
+ * `none`, so the whole module fails off in one place.
+ */
+:root {
+  /* Row lift — a work row rises toward the reader on hover/focus. */
+  --m-row-lift:
+    transform var(--motion-fast),
+    background-color var(--motion-fast),
+    padding-left var(--motion-fast);
+
+  /* View enter — the work list settles into place once, never hidden. */
+  --m-view-enter: m-view-enter var(--motion-enter);
+
+  /* Focus — the focus ring eases out to its offset. */
+  --m-focus: outline-offset var(--motion-fast);
+}
+
+@keyframes m-view-enter {
+  from {
+    transform: translateY(6px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --m-row-lift: none;
+    --m-view-enter: none;
+    --m-focus: none;
+  }
+}

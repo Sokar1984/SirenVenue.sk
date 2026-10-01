@@ -1,4 +1,5 @@
 @import "../modules/tokens/tokens.css";
+@import "../modules/motion/motion.css";
 
 * {
   box-sizing: border-box;
@@ -33,6 +34,7 @@ a:hover {
 :focus-visible {
   outline: 1px solid var(--fg);
   outline-offset: 3px;
+  transition: var(--m-focus);
 }
 
 ::selection {
@@ -145,6 +147,7 @@ a:hover {
   list-style: none;
   margin: 0;
   padding: 0;
+  animation: var(--m-view-enter);
 }
 
 .row + .row {
@@ -158,12 +161,13 @@ a:hover {
   align-items: baseline;
   gap: 1rem;
   padding: 1.05rem 0.25rem;
-  transition: background-color var(--motion-fast), padding-left var(--motion-fast);
+  transition: var(--m-row-lift);
 }
 
 .row-link:hover {
   background: var(--lift);
   padding-left: 0.85rem;
+  transform: translateY(-2px);
 }
 
 .row-no {
