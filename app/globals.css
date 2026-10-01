@@ -1,11 +1,15 @@
 :root {
   color-scheme: dark;
 
+  /* Contrast on --bg #08080a, measured (WCAG 2.1 relative luminance):
+     --fg 18.21:1   --muted 6.99:1   --dim 4.70:1
+     Every token used for text passes AA (4.5:1). --dim carries the smallest
+     type on the page, so it is the one that must not drift back down. */
   --bg: #08080a;
   --fg: #f4f4f5;
-  --muted: #7c7c84;
-  --dim: #4b4b52;
-  --line: #1d1d21;
+  --muted: #9898a0;
+  --dim: #7a7a82;
+  --line: #232329;
   --lift: rgba(255, 255, 255, 0.035);
 
   --pad: clamp(1.25rem, 5vw, 3.5rem);
@@ -87,7 +91,7 @@ a:hover {
 }
 
 .mark-legal {
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   color: var(--dim);
 }
 
@@ -95,7 +99,7 @@ a:hover {
   display: flex;
   flex-wrap: wrap;
   gap: 0.9rem;
-  font-size: 0.68rem;
+  font-size: 0.72rem;
   letter-spacing: 0.14em;
 }
 
@@ -117,6 +121,22 @@ a:hover {
   letter-spacing: -0.025em;
 }
 
+/* ---- note (used by not-found) ---- */
+
+.note {
+  margin: 0;
+  max-width: 46ch;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.note a {
+  color: var(--fg);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 /* ---- index ---- */
 
 .index {
@@ -131,7 +151,7 @@ a:hover {
 }
 
 .label {
-  font-size: 0.66rem;
+  font-size: 0.7rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--dim);
@@ -186,7 +206,7 @@ a:hover {
 .row-descriptor {
   grid-area: status;
   color: var(--dim);
-  font-size: 0.66rem;
+  font-size: 0.7rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
@@ -212,7 +232,7 @@ a:hover {
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 0.75rem 2rem;
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   color: var(--muted);
 }
 
