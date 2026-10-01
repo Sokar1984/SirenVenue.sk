@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { enabledLocales, isLocale } from "@/modules/i18n";
 import { organizationJsonLd, pageMetadata } from "@/modules/seo";
@@ -36,11 +37,18 @@ export default async function LocaleLayout({
     notFound();
   }
 
+  // Reading the per-request nonce opts this route into dynamic rendering: a
+  // statically prerendered document cannot carry a fresh nonce, and a stale
+  // one would be rejected by the CSP. Next.js stamps the same nonce onto its
+  // own bootstrap scripts from the request header.
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
+
   return (
     <html lang={locale}>
       <body>
         <script
           type="application/ld+json"
+          nonce={nonce}
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(organizationJsonLd()),
           }}
