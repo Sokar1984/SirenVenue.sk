@@ -1,11 +1,19 @@
+import Link from "next/link";
+import { notFound } from "next/navigation";
 import { works } from "@/content/works";
 import { company, contact } from "@/content/legal";
+import { enabledLocales, isLocale, localeLabel } from "@/modules/i18n";
 
-/** Locale order is deliberate: SK first, Venezuelan Spanish kept as its own code. */
-const LOCALES = ["SK", "EN", "DE", "ES", "VE", "HU", "CS", "UK", "RU"];
-const ACTIVE_LOCALE = "SK";
+export default async function Home({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  if (!isLocale(locale)) {
+    notFound();
+  }
 
-export default function Home() {
   return (
     <div className="shell">
       <header className="head">
@@ -14,16 +22,20 @@ export default function Home() {
           <span className="mark-legal">s.r.o.</span>
         </div>
 
-        {/* Visual only for now — i18n routing lands with the locale batch. */}
         <nav className="locales" aria-label="Language">
-          {LOCALES.map((locale) => (
-            <span
-              key={locale}
-              className={locale === ACTIVE_LOCALE ? "locale is-active" : "locale"}
-            >
-              {locale}
-            </span>
-          ))}
+          {enabledLocales.map((candidate) => {
+            const active = candidate === locale;
+            return (
+              <Link
+                key={candidate}
+                href={`/${candidate}`}
+                className={active ? "locale is-active" : "locale"}
+                aria-current={active ? "true" : undefined}
+              >
+                {localeLabel(candidate)}
+              </Link>
+            );
+          })}
         </nav>
       </header>
 
