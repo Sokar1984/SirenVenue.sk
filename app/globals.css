@@ -208,13 +208,17 @@ main {
 }
 
 /* One left-anchored two-line block. Line one is number + name with the arrow
-   bound to the name's baseline at the row's right edge, so it can never drift
-   into dead space. Line two is role and descriptor as one metadata sentence,
-   indented to the name's column. */
+   sitting on the name's own line, a single gap after a fixed-width name track
+   so it reads as the name's affordance and aligns vertically across rows. The
+   name track is fixed (not `max-content`) precisely so the arrows share one
+   x-position instead of drifting right with each longer name. Line two is role
+   and descriptor as one metadata sentence, indented to the name's column. The
+   row's right side stays deliberately empty. */
 .row-link {
+  --row-name-track: 17.5rem;
   flex: 1;
   display: grid;
-  grid-template-columns: max-content minmax(0, 1fr) auto;
+  grid-template-columns: max-content var(--row-name-track) max-content;
   grid-template-areas:
     "no name arrow"
     ". meta meta";
@@ -269,7 +273,9 @@ main {
   color: var(--dim);
 }
 
-.row-descriptor::before {
+/* Only joins a role that precedes it; when the descriptor stands alone
+   (its words already carry the role) it gets no separator. */
+.row-role + .row-descriptor::before {
   content: "·";
   margin-right: 0.5rem;
   color: var(--dim);

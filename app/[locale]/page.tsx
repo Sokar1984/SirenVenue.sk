@@ -41,10 +41,17 @@ export default async function Home({
           <ol className="rows" role="list">
             {works.map((work, i) => {
               const role = work.role.replace(/_/g, " ");
+              const descriptor = work.descriptor?.replace(/_/g, " ") ?? null;
+              // The descriptor repeats the role when it contains it (after a
+              // case-insensitive trim), not only when the two are identical:
+              // "Live venue product" carries "product". Containment is the
+              // repeat; an unrelated descriptor keeps its role.
               const repeatsRole =
-                work.descriptor !== null &&
-                work.descriptor.replace(/_/g, " ").trim().toLowerCase() ===
-                  role.trim().toLowerCase();
+                descriptor !== null &&
+                descriptor
+                  .trim()
+                  .toLowerCase()
+                  .includes(role.trim().toLowerCase());
               return (
                 <li className="row" key={work.slug} role="listitem">
                   <a
@@ -58,9 +65,13 @@ export default async function Home({
                     </span>
                     <span className="row-name">{work.name}</span>
                     <span className="row-meta">
-                      <span className="row-role">{role}</span>
-                      {work.descriptor && !repeatsRole ? (
-                        <span className="row-descriptor">{work.descriptor}</span>
+                      {repeatsRole ? null : (
+                        <span className="row-role">{role}</span>
+                      )}
+                      {work.descriptor ? (
+                        <span className="row-descriptor">
+                          {work.descriptor}
+                        </span>
                       ) : null}
                     </span>
                     <span className="row-arrow" aria-hidden="true">
