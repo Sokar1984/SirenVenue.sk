@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "[ -d node_modules/@prisma/client ] || npm install --ignore-scripts --no-audit --no-fund; prisma generate && next build",
+    "postinstall": "prisma generate",
     "start": "next start",
     "lint": "next lint",
     "db:migrate": "prisma migrate deploy --config prisma/prisma.config.ts",
