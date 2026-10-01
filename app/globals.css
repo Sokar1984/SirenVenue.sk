@@ -16,7 +16,7 @@ body {
   font-family: var(--font-sans, var(--font-fallback));
   font-size: var(--fs-body);
   line-height: 1.5;
-  font-feature-settings: "kern" 1, "calt" 1, "tnum" 1;
+  font-feature-settings: "kern" 1, "calt" 1;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -26,7 +26,9 @@ a {
   text-decoration: none;
 }
 
-a:hover {
+/* Row links carry their own hover affordance; the global underline must never
+   reach one, or a single rule draws through the whole row. */
+a:not(.row-link):hover {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -173,27 +175,28 @@ main {
   border-top: 1px solid var(--line);
 }
 
-/* Name, role and descriptor sit as one left-anchored block; the flexible
-   empty track keeps the arrow on the right edge. Every descriptor track is
-   `max-content`, so a descriptor can never wrap. */
+/* One left-anchored two-line block. Line one is number + name with the arrow
+   bound to the name's baseline at the row's right edge, so it can never drift
+   into dead space. Line two is role and descriptor as one metadata sentence,
+   indented to the name's column. */
 .row-link {
   flex: 1;
   display: grid;
-  grid-template-columns:
-    2.75rem max-content max-content minmax(16rem, max-content) minmax(0, 1fr)
-    1.25rem;
-  grid-template-areas: "no name role status . arrow";
+  grid-template-columns: max-content minmax(0, 1fr) auto;
+  grid-template-areas:
+    "no name arrow"
+    ". meta meta";
   align-items: baseline;
   align-content: center;
-  column-gap: clamp(0.75rem, 1.5vw, 1.25rem);
-  padding: 1.05rem 0.25rem;
+  column-gap: clamp(0.6rem, 1vw, 1rem);
+  row-gap: 0.4rem;
+  padding: 1.4rem 0.25rem;
   transition: var(--m-row-lift);
+  text-decoration: none;
 }
 
 .row-link:hover {
   background: var(--lift);
-  padding-left: 0.85rem;
-  transform: translateY(-2px);
 }
 
 .row-no {
@@ -209,21 +212,35 @@ main {
   font-size: var(--fs-row-name);
   font-weight: 500;
   letter-spacing: -0.02em;
+  transition: transform var(--motion-fast);
+}
+
+.row-link:hover .row-name {
+  transform: translateX(0.25rem);
+}
+
+.row-meta {
+  grid-area: meta;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  color: var(--muted);
+  font-size: var(--fs-row-meta);
+  line-height: 1.4;
 }
 
 .row-role {
-  grid-area: role;
   color: var(--muted);
-  font-size: var(--fs-row-role);
 }
 
 .row-descriptor {
-  grid-area: status;
   color: var(--dim);
-  font-size: var(--fs-row-descriptor);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  white-space: nowrap;
+}
+
+.row-descriptor::before {
+  content: "·";
+  margin-right: 0.5rem;
+  color: var(--dim);
 }
 
 .row-arrow {
@@ -231,10 +248,12 @@ main {
   justify-self: end;
   color: var(--dim);
   font-size: var(--fs-row-arrow);
+  transition: color var(--motion-fast), transform var(--motion-fast);
 }
 
 .row-link:hover .row-arrow {
   color: var(--fg);
+  transform: translate(0.2rem, -0.2rem);
 }
 
 /* ---- foot ---- */
@@ -257,6 +276,11 @@ main {
   gap: 0.35rem 1.5rem;
 }
 
+/* The email is the footer's one bright element; everything else stays quiet. */
+.strip a {
+  color: var(--fg);
+}
+
 .legal {
   color: var(--dim);
 }
@@ -264,28 +288,22 @@ main {
 /* ---- narrow ---- */
 
 @media (max-width: 720px) {
-  /* Phone keeps its natural three-line rows; only the desktop index flexes. */
+  /* Phone keeps the same two-line block: name + arrow, then metadata beneath.
+     Only the desktop index flexes to fill the viewport. */
   .row {
     flex: none;
   }
 
   .row-link {
     grid-template-columns: 2.25rem minmax(0, 1fr) 1.25rem;
-    grid-template-areas:
-      "no name arrow"
-      ". role role"
-      ". status status";
+    column-gap: 0.6rem;
     row-gap: 0.3rem;
     align-content: normal;
-    padding: 0.9rem 0.25rem;
+    padding: 1rem 0.25rem;
   }
 
-  .row-role {
-    font-size: var(--fs-row-role-narrow);
-  }
-
-  .row-descriptor {
-    white-space: normal;
+  .row-meta {
+    flex-wrap: wrap;
   }
 }
 

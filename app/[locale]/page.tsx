@@ -62,8 +62,12 @@ export default async function Home({
                 >
                   <span className="row-no">{String(i + 1).padStart(2, "0")}</span>
                   <span className="row-name">{work.name}</span>
-                  <span className="row-role">{work.role}</span>
-                  <span className="row-descriptor">{work.descriptor}</span>
+                  <span className="row-meta">
+                    <span className="row-role">{work.role}</span>
+                    {work.descriptor ? (
+                      <span className="row-descriptor">{work.descriptor}</span>
+                    ) : null}
+                  </span>
                   <span className="row-arrow" aria-hidden="true">
                     ↗
                   </span>
