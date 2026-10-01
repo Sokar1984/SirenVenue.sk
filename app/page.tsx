@@ -1,8 +1,4 @@
-const works = [
-  { name: "SirenVenue.com", href: "https://www.sirenvenue.com", role: "Live venue" },
-  { name: "BlinkLive", href: "https://blinklive.app", role: "Live camera" },
-  { name: "DOT. Gallery", href: "https://dotgallery.sk", role: "Gallery systems" },
-];
+import { works } from "@/content/works";
 
 export default function Home() {
   return (
