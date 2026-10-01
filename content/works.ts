@@ -1,27 +1,32 @@
 /**
- * Portfolio works shown on the plaque grid.
+ * Portfolio works on the plaque grid.
  *
- * `role` uses the vocabulary the CEO vision specifies for work/case entries:
- * **product / live / gallery ops / systems**. Do not invent descriptive labels
- * here — the vision names the terms.
+ * SOURCE OF TRUTH — Notion: CRE / SirenVenue -> "sirenvenue.sk — CEO vision
+ * (company site)". Entries here must come from that page and nowhere else.
  *
- * `href` values are probed before being added; a dead one is a bug, not a detail.
+ * NOT sources: GitHub repos and package.json files, the sirenvenue.com
+ * project's Linear board, other projects' Notion pages, other agents' messages.
+ * Scraping those once put fields in this file describing other people's
+ * projects, and mis-stated what this company site is.
+ *
+ * The vision's own portfolio list, verbatim:
+ *   - SirenVenue.com — live venue product
+ *   - BlinkLive — live camera / LiveKit stack
+ *   - DOT. Gallery / AMB — inventory, staff UI, redesign
+ *   - AI / ops systems — only if we want "systems" on the shelf without
+ *     selling agency hours
+ *
+ * `role` vocabulary is fixed by the vision: product | live | gallery ops | systems.
  */
 export type Work = {
-  /** Product name as it appears on the grid. */
+  /** Name exactly as the vision lists it. */
   name: string;
-  /** One of: product | live | gallery ops | systems */
+  /** product | live | gallery ops | systems — the vision's terms, not ours. */
   role: "product" | "live" | "gallery ops" | "systems";
-  /** Live URL that answers. Probed before adding. */
+  /** Live URL, supplied or approved by Matus. Probed before use. */
   href: string;
-  /** Public repo only. Omit when private. */
-  repo?: string;
-  /** Real stack, one line, taken from package.json. */
-  stack?: string;
-  /** Live / staging / in development */
-  status?: string;
-  /** One or two factual sentences. No marketing. */
-  note?: string;
+  /** The vision's own words for this work. Omit rather than invent one. */
+  descriptor?: string;
 };
 
 export const works: Work[] = [
@@ -29,41 +34,22 @@ export const works: Work[] = [
     name: "SirenVenue.com",
     role: "product",
     href: "https://sirenvenue.com",
-    stack: "Next.js · Prisma · Vercel Blob",
-    status: "Live",
+    descriptor: "Live venue product",
   },
   {
     name: "BlinkLive",
     role: "live",
     href: "https://blinklive.app",
-    stack: "Next.js · LiveKit",
-    status: "Live",
-    note: "Portable live webcam media plane. Consumed by SirenVenue and DOT. AMB; no reverse dependencies on the host apps.",
+    descriptor: "Live camera / LiveKit stack",
   },
   {
     name: "DOT. Gallery",
     role: "gallery ops",
     href: "https://dotgallery.sk",
-    repo: "https://github.com/Sokar1984/dot-contemporary",
-    stack: "Next.js · TypeScript",
-    status: "Live",
+    descriptor: "Inventory, staff UI, redesign",
   },
-  {
-    name: "DOT. sklad",
-    role: "gallery ops",
-    href: "https://sklad.dotgallery.sk",
-    stack: "Next.js 15 · TypeScript · Postgres / Prisma",
-    status: "Live in production",
-    note: "One inventory for DOT. Gallery: artists, works, clients, where a work is, and the paper that hangs on it. Staff session-cookie auth, API under /api/v1.",
-    // Repo is private: https://github.com/Sokar1984/dot-sklad — not linked.
-  },
-  {
-    name: "DOT. AMB 2026",
-    role: "gallery ops",
-    href: "https://dotgallery.sk/art-market-budapest",
-    stack: "Next.js",
-    status: "Live",
-    note: "Fair landing page for DOT. Contemporary at Art Market Budapest 2026.",
-    // Repo dot-amb-2026 is private; the old dot-amb-2026.vercel.app deploy is gone (404).
-  },
+  // Deliberately NOT added, pending Matus's word:
+  //   - DOT. sklad and the AMB 2026 page — rows I built from GitHub and another
+  //     agent's brief. The vision folds them into "DOT. Gallery / AMB" above.
+  //   - "AI / ops systems" — the vision lists it as optional ("only if we want").
 ];

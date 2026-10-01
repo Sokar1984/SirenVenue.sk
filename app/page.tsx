@@ -48,7 +48,7 @@ export default function Home() {
                   <span className="row-no">{String(i + 1).padStart(2, "0")}</span>
                   <span className="row-name">{work.name}</span>
                   <span className="row-role">{work.role}</span>
-                  <span className="row-status">{work.status ?? "—"}</span>
+                  <span className="row-descriptor">{work.descriptor}</span>
                   <span className="row-arrow" aria-hidden="true">
                     ↗
                   </span>
