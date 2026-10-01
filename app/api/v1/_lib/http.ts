@@ -14,7 +14,11 @@
 export type ApiErrorCode =
   | "invalid_locale"
   | "content_unavailable"
-  | "database_unavailable";
+  | "database_unavailable"
+  | "unauthorized"
+  | "rate_limited"
+  | "ai_door_disabled"
+  | "provider_unconfigured";
 
 /** Builds a JSON error response with the one shared envelope. */
 export function apiError(
