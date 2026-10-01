@@ -38,6 +38,6 @@ export const company = {
 } as const;
 
 export const contact = {
-  email: "hello@sirenvenue.sk",
+  email: "info@sirenvenue.sk",
   city: "Bratislava, Slovakia",
 } as const;
