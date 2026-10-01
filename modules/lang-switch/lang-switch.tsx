@@ -59,7 +59,7 @@ export function LangSwitch({ locale, path = "", label }: LangSwitchProps) {
   const triggerRef = useRef<HTMLButtonElement>(null);
   const optionRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
-  const controlLabel = label ?? message(locale, "nav.language") ?? "Language";
+  const controlLabel = label ?? message(locale, "nav.language");
 
   function openList() {
     setActiveIndex(Math.max(0, enabledLocales.indexOf(locale)));
@@ -150,7 +150,9 @@ export function LangSwitch({ locale, path = "", label }: LangSwitchProps) {
         className="lang-trigger"
         aria-haspopup="listbox"
         aria-expanded={open}
-        aria-label={`${controlLabel}: ${localeLabel(locale)}`}
+        aria-label={
+          controlLabel ? `${controlLabel}: ${localeLabel(locale)}` : undefined
+        }
         onClick={() => (open ? closeList() : openList())}
         onKeyDown={onTriggerKeyDown}
       >
@@ -171,7 +173,7 @@ export function LangSwitch({ locale, path = "", label }: LangSwitchProps) {
       {open && (
         <div
           role="listbox"
-          aria-label={controlLabel}
+          aria-label={controlLabel ?? undefined}
           className="lang-list"
           onKeyDown={onListKeyDown}
         >
