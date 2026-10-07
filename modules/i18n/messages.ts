@@ -1,13 +1,14 @@
 /**
- * Typed message catalog — the only place the site's chrome and section labels
+ * Typed message catalog - the only place the site's chrome and section labels
  * are written.
  *
  * What belongs here
  * -----------------
  * Short, structural strings: the colophon line, section labels, an `aria-label`
- * or two, and the 404 copy. Product names never belong here. `SirenVenue.com`,
- * `BlinkLive`, and `DOT. Gallery` are brands: they are spelled the same in every
- * locale and are translated by no one.
+ * or two, and the 404 copy. Product names never belong here. `BlinkLive`
+ * and `DOT. Gallery` are brands: they are spelled the same in every locale and
+ * are translated by no one. (SirenVenue.com tile removed per SOK-350.)
+ * Home plaque uses home.* keys for SOK-348 vision sections.
  *
  * Where the strings live at runtime
  * ---------------------------------
@@ -18,7 +19,7 @@
  *
  * The chrome deliberately reads this module and not that table. The shell must
  * render when Postgres is down (see the outage policy in `modules/content`), and
- * the render policy below — a declared-missing key renders nothing — is stated
+ * the render policy below - a declared-missing key renders nothing - is stated
  * only here: the table has no notion of a declaration, and the seed projects
  * rows without ever deleting one. `modules/content` owns the only Prisma client,
  * so the chrome cannot consult the table without opening a second one. Chosen:
@@ -38,12 +39,12 @@
  * `es-ve` is Venezuelan Spanish and is its own locale. It is never flattened
  * into `es` and never seeded from it.
  *
- * Render policy — no silent English
+ * Render policy - no silent English
  * ---------------------------------
  * A key that is absent for a locale and not declared in `declaredMissing` is a
  * defect: the completeness gate fails the build. At render time, `message()`
  * returns the value only for the exact locale asked for. A declared-missing key
- * renders nothing at all — the surface omits the element rather than showing a
+ * renders nothing at all - the surface omits the element rather than showing a
  * string in the wrong language. There is no `defaultLocale` fallback, ever:
  * an English string shown to a Slovak visitor is exactly the failure the vision
  * forbids. (The one honest exception is that a *brand* is identical in every
@@ -60,12 +61,15 @@ import type { Locale } from "./locales";
 export const messageKeys = [
   "skip",
   "colophon",
-  "work.label",
-  "work.count",
-  "work.aria",
   "nav.language",
   "notFound.lead",
   "notFound.note",
+  "home.identity",
+  "home.client",
+  "home.blink",
+  "home.operations",
+  "home.documents",
+  "home.live",
 ] as const;
 
 export type MessageKey = (typeof messageKeys)[number];
@@ -87,101 +91,146 @@ export const catalog: MessageCatalog = {
   sk: {
     skip: "Prejsť na hlavný obsah",
     colophon: "Softvér a systémy pre live, venue a galérie.",
-    "work.label": "Práce",
-    "work.count": "{count} systémov",
-    "work.aria": "Práce",
     "nav.language": "Jazyk",
     "notFound.lead": "Na tejto adrese nič nie je.",
     "notFound.note":
-      "Odkaz je zastaraný alebo nikdy nebol náš. Každý produkt, ktorý vydávame, odkazuje späť na sirenvenue.sk — toto je tá stránka.",
+      "Odkaz je zastaraný alebo nikdy nebol náš. Každý produkt, ktorý vydávame, odkazuje späť na sirenvenue.sk. Toto je tá stránka.",
+    "home.identity":
+      "SirenVenue stavia softvér pre galérie a kultúrne priestory. Navrhujeme a dodávame systémy, na ktorých tieto miesta skutočne bežia. Bratislava. Slovenská spoločnosť. Remeslo na prvom mieste.",
+    "home.client":
+      "DOT. Gallery + COMMA modernizácia. Inventár, dokumenty, udalosti, predaj, automatizácia naprieč doménami. AI sekretárka na podanie a granty. Sklad je interná chrbtica, nie verejná produktová dlaždica.",
+    "home.blink": "Živá kamera pre priestory, ktoré potrebujú oči.",
+    "home.operations": "operácie",
+    "home.documents": "dokumenty",
+    "home.live": "live",
   },
   en: {
     skip: "Skip to main content",
     colophon: "Software & systems for live, venue, and gallery.",
-    "work.label": "Work",
-    "work.count": "{count} systems",
-    "work.aria": "Work",
     "nav.language": "Language",
     "notFound.lead": "Nothing at this address.",
     "notFound.note":
-      "The link is out of date, or it was never ours. Every product we ship links back to sirenvenue.sk — this is that page.",
+      "The link is out of date, or it was never ours. Every product we ship links back to sirenvenue.sk. This is that page.",
+    "home.identity":
+      "SirenVenue builds software for galleries and cultural venues. We design and ship the systems those places actually run on. Bratislava. Slovak company. Craft first.",
+    "home.client":
+      "DOT. Gallery + COMMA modernization. Inventory, documents, events, sales, automation across domains. AI secretary for filing and grants. Sklad is the internal backbone, not a public product tile.",
+    "home.blink": "Live camera for rooms that need eyes.",
+    "home.operations": "operations",
+    "home.documents": "documents",
+    "home.live": "live",
   },
   de: {
     skip: "Zum Hauptinhalt springen",
     colophon: "Software & Systeme für Live, Venue und Galerie.",
-    "work.label": "Arbeiten",
-    "work.count": "{count} Systeme",
-    "work.aria": "Arbeiten",
     "nav.language": "Sprache",
     "notFound.lead": "Unter dieser Adresse gibt es nichts.",
     "notFound.note":
-      "Der Link ist veraltet, oder er war nie unserer. Jedes Produkt, das wir ausliefern, verweist zurück auf sirenvenue.sk — das hier ist diese Seite.",
+      "Der Link ist veraltet, oder er war nie unserer. Jedes Produkt, das wir ausliefern, verweist zurück auf sirenvenue.sk. Das hier ist diese Seite.",
+    "home.identity":
+      "SirenVenue baut Software für Galerien und Kulturorte. Wir entwerfen und liefern die Systeme, die diese Orte tatsächlich nutzen. Bratislava. Slowakisches Unternehmen. Handwerk zuerst.",
+    "home.client":
+      "DOT. Gallery + COMMA Modernisierung. Inventar, Dokumente, Veranstaltungen, Verkauf, Automatisierung über Domänen. KI Sekretärin für Ablage und Förderungen. Sklad ist das interne Rückgrat, keine öffentliche Produktkachel.",
+    "home.blink": "Live Kamera für Räume, die Augen brauchen.",
+    "home.operations": "operations",
+    "home.documents": "documents",
+    "home.live": "live",
   },
   es: {
     skip: "Saltar al contenido principal",
     colophon: "Software y sistemas para directo, recintos y galerías.",
-    "work.label": "Trabajos",
-    "work.count": "{count} sistemas",
-    "work.aria": "Trabajos",
     "nav.language": "Idioma",
     "notFound.lead": "En esta dirección no hay nada.",
     "notFound.note":
-      "El enlace está desactualizado o nunca fue nuestro. Cada producto que publicamos enlaza de vuelta a sirenvenue.sk — esta es esa página.",
+      "El enlace está desactualizado o nunca fue nuestro. Cada producto que publicamos enlaza de vuelta a sirenvenue.sk. Esta es esa página.",
+    "home.identity":
+      "SirenVenue construye software para galerías y espacios culturales. Diseñamos y entregamos los sistemas que estos lugares realmente utilizan. Bratislava. Empresa eslovaca. Artesanía primero.",
+    "home.client":
+      "DOT. Gallery + modernización COMMA. Inventario, documentos, eventos, ventas, automatización entre dominios. Secretaria de IA para archivos y subvenciones. Sklad es la columna interna, no una baldosa de producto público.",
+    "home.blink": "Cámara en vivo para salas que necesitan ojos.",
+    "home.operations": "operations",
+    "home.documents": "documents",
+    "home.live": "live",
   },
   "es-ve": {
     skip: "Saltar al contenido principal",
     colophon: "Software y sistemas para vivo, recintos y galerías.",
-    "work.label": "Trabajos",
-    "work.count": "{count} sistemas",
-    "work.aria": "Trabajos",
     "nav.language": "Idioma",
     "notFound.lead": "No hay nada en esta dirección.",
     "notFound.note":
-      "El enlace está vencido o nunca fue nuestro. Cada producto que lanzamos enlaza de vuelta a sirenvenue.sk — esta es esa página.",
+      "El enlace está vencido o nunca fue nuestro. Cada producto que lanzamos enlaza de vuelta a sirenvenue.sk. Esta es esa página.",
+    "home.identity":
+      "SirenVenue construye software para galerías y espacios culturales. Diseñamos y entregamos los sistemas que estos lugares realmente utilizan. Bratislava. Empresa eslovaca. Artesanía primero.",
+    "home.client":
+      "DOT. Gallery + modernización COMMA. Inventario, documentos, eventos, ventas, automatización entre dominios. Secretaria de IA para archivos y subvenciones. Sklad es la columna interna, no una baldosa de producto público.",
+    "home.blink": "Cámara en vivo para salas que necesitan ojos.",
+    "home.operations": "operations",
+    "home.documents": "documents",
+    "home.live": "live",
   },
   hu: {
     skip: "Ugrás a fő tartalomra",
     colophon: "Szoftver és rendszerek élő, helyszíni és galéria használatra.",
-    "work.label": "Munkák",
-    "work.count": "{count} rendszer",
-    "work.aria": "Munkák",
     "nav.language": "Nyelv",
     "notFound.lead": "Ezen a címen nincs semmi.",
     "notFound.note":
-      "A link elavult, vagy soha nem is a miénk volt. Minden termék, amit kiadunk, visszamutat a sirenvenue.sk-ra — ez az az oldal.",
+      "A link elavult, vagy soha nem is a miénk volt. Minden termék, amit kiadunk, visszamutat a sirenvenue.sk-ra. Ez az az oldal.",
+    "home.identity":
+      "SirenVenue szoftvert épít galériák és kulturális helyszínek számára. Megtervezzük és leszállítjuk azokat a rendszereket, amelyeket ezek a helyek valóban használnak. Bratislava. Szlovák cég. Kézművesség először.",
+    "home.client":
+      "DOT. Gallery + COMMA modernizáció. Leltár, dokumentumok, események, értékesítés, automatizálás tartományok között. AI titkár irattárhoz és támogatásokhoz. Sklad a belső gerinc, nem nyilvános termékcsempe.",
+    "home.blink": "Élő kamera olyan helyiségekhez, amelyeknek szemek kellenek.",
+    "home.operations": "operations",
+    "home.documents": "documents",
+    "home.live": "live",
   },
   cs: {
     skip: "Přeskočit na hlavní obsah",
     colophon: "Software a systémy pro live, venue a galerie.",
-    "work.label": "Práce",
-    "work.count": "{count} systémů",
-    "work.aria": "Práce",
     "nav.language": "Jazyk",
     "notFound.lead": "Na této adrese nic není.",
     "notFound.note":
-      "Odkaz je zastaralý, nebo nikdy nebyl náš. Každý produkt, který vydáváme, odkazuje zpět na sirenvenue.sk — tohle je ta stránka.",
+      "Odkaz je zastaralý, nebo nikdy nebyl náš. Každý produkt, který vydáváme, odkazuje zpět na sirenvenue.sk. Tohle je ta stránka.",
+    "home.identity":
+      "SirenVenue staví software pro galerie a kulturní prostory. Navrhujeme a dodáváme systémy, na kterých tato místa skutečně běží. Bratislava. Slovenská společnost. Řemeslo na prvním místě.",
+    "home.client":
+      "DOT. Gallery + COMMA modernizace. Inventář, dokumenty, události, prodej, automatizace napříč doménami. AI sekretářka pro podání a granty. Sklad je interní páteř, ne veřejná produktová dlaždice.",
+    "home.blink": "Živá kamera pro místnosti, které potřebují oči.",
+    "home.operations": "operations",
+    "home.documents": "documents",
+    "home.live": "live",
   },
   uk: {
     skip: "Перейти до основного вмісту",
     colophon: "Софтвер і системи для сцени, майданчиків і галерей.",
-    "work.label": "Роботи",
-    "work.count": "{count} систем",
-    "work.aria": "Роботи",
     "nav.language": "Мова",
     "notFound.lead": "За цією адресою нічого немає.",
     "notFound.note":
-      "Посилання застаріло, або ніколи не було нашим. Кожен продукт, який ми випускаємо, веде назад на sirenvenue.sk — це та сторінка.",
+      "Посилання застаріло, або ніколи не було нашим. Кожен продукт, який ми випускаємо, веде назад на sirenvenue.sk. Це та сторінка.",
+    "home.identity":
+      "SirenVenue створює програмне забезпечення для галерей і культурних просторів. Ми проєктуємо та постачаємо системи, на яких ці місця справді працюють. Bratislava. Словацька компанія. Ремесло насамперед.",
+    "home.client":
+      "DOT. Gallery + COMMA модернізація. Інвентар, документи, події, продажі, автоматизація між доменами. AI секретар для подання та грантів. Sklad є внутрішнім хребтом, не публічним продуктом.",
+    "home.blink": "Жива камера для приміщень, яким потрібні очі.",
+    "home.operations": "operations",
+    "home.documents": "documents",
+    "home.live": "live",
   },
   ru: {
     skip: "Перейти к основному содержанию",
     colophon: "Софт и системы для сцены, площадок и галерей.",
-    "work.label": "Работы",
-    "work.count": "{count} систем",
-    "work.aria": "Работы",
     "nav.language": "Язык",
     "notFound.lead": "По этому адресу ничего нет.",
     "notFound.note":
-      "Ссылка устарела или никогда не была нашей. Каждый продукт, который мы выпускаем, ведёт обратно на sirenvenue.sk — это та самая страница.",
+      "Ссылка устарела или никогда не была нашей. Каждый продукт, который мы выпускаем, ведёт обратно на sirenvenue.sk. Это та самая страница.",
+    "home.identity":
+      "SirenVenue создаёт ПО для галерей и культурных пространств. Мы проектируем и поставляем системы, на которых эти места реально работают. Bratislava. Словацкая компания. Ремесло прежде всего.",
+    "home.client":
+      "DOT. Gallery + COMMA модернизация. Инвентарь, документы, события, продажи, автоматизация между доменами. AI секретарь для подачи и грантов. Sklad это внутренний хребет, не публичный продукт.",
+    "home.blink": "Живая камера для помещений, которым нужны глаза.",
+    "home.operations": "operations",
+    "home.documents": "documents",
+    "home.live": "live",
   },
 };
 
@@ -201,7 +250,7 @@ export type DeclaredMissing = {
  * Keys that are deliberately not translated for a locale. Empty today: every
  * locale carries a draft of every key. When a surface ships a label that no
  * translator can vouch for in a given language, name it here and the gate stays
- * honest instead of failing — or worse, falling back to English.
+ * honest instead of failing - or worse, falling back to English.
  */
 export const declaredMissing: readonly DeclaredMissing[] = [];
 
@@ -238,7 +287,7 @@ export function format(value: string, params: MessageParams = {}): string {
  * locale.
  *
  * This is the documented render policy: `null` means the caller renders
- * nothing — not English, not Slovak, not a placeholder. A declaration beats a
+ * nothing - not English, not Slovak, not a placeholder. A declaration beats a
  * stale value: if `(locale, key)` is declared missing, nothing is returned even
  * if a value is still present.
  */
@@ -273,7 +322,7 @@ function isReviewed(locale: Locale): boolean {
 
 /**
  * Every present value as a seedable row, in canonical order. Declared-missing
- * entries produce no row — their absence in the table is the declaration.
+ * entries produce no row - their absence in the table is the declaration.
  */
 export function messageRows(): MessageRow[] {
   const rows: MessageRow[] = [];

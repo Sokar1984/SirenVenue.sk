@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
-import { getWorks } from "@/modules/content";
 import { isLocale, message } from "@/modules/i18n";
 import { Chrome } from "./layout";
+import { getHomepageCopy } from "@/modules/content";
+import { AdminCopyEditor } from "./AdminCopyEditor";
 
 export default async function Home({
   params,
@@ -13,76 +14,82 @@ export default async function Home({
     notFound();
   }
 
-  // The index is a shell. If the content database is unreachable we render it
-  // empty rather than failing the page or reaching for the seed file; see the
-  // outage policy documented in `modules/content`.
-  const works = await getWorks(locale).catch(() => []);
-
-  // Every chrome string comes from the catalog. A `null` result — an absent or
-  // declared-missing key — omits the element; English is never rendered in its
-  // place. Product names (`SirenVenue.com`, `BlinkLive`, `DOT. Gallery`) are
-  // brands and are not catalog entries.
-  const colophon = message(locale, "colophon");
-  const workLabel = message(locale, "work.label");
-  const workCount = message(locale, "work.count", { count: works.length });
-  const workAria = message(locale, "work.aria");
+  const copy = await getHomepageCopy(locale);
+  const identity = copy.identity ?? message(locale, "home.identity");
+  const client = copy.client ?? message(locale, "home.client");
+  const blink = copy.blink ?? message(locale, "home.blink");
+  const operations = message(locale, "home.operations");
+  const documents = message(locale, "home.documents");
+  const live = message(locale, "home.live");
 
   return (
     <Chrome locale={locale} path="" home>
-      {colophon ? <p className="colophon">{colophon}</p> : null}
-
       <main id="main" tabIndex={-1}>
-        <section className="index" aria-label={workAria ?? undefined}>
-          <div className="index-head">
-            {workLabel ? <span className="label">{workLabel}</span> : null}
-            {workCount ? <span className="label">{workCount}</span> : null}
-          </div>
-
-          <ol className="rows" role="list">
-            {works.map((work, i) => {
-              const role = work.role.replace(/_/g, " ");
-              const descriptor = work.descriptor?.replace(/_/g, " ") ?? null;
-              // The descriptor repeats the role when it contains it (after a
-              // case-insensitive trim), not only when the two are identical:
-              // "Live venue product" carries "product". Containment is the
-              // repeat; an unrelated descriptor keeps its role.
-              const repeatsRole =
-                descriptor !== null &&
-                descriptor
-                  .trim()
-                  .toLowerCase()
-                  .includes(role.trim().toLowerCase());
-              return (
-                <li className="row" key={work.slug} role="listitem">
-                  <a
-                    className="row-link"
-                    href={work.href}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <span className="row-no">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <span className="row-name">{work.name}</span>
-                    <span className="row-meta">
-                      {repeatsRole ? null : (
-                        <span className="row-role">{role}</span>
-                      )}
-                      {work.descriptor ? (
-                        <span className="row-descriptor">
-                          {work.descriptor}
-                        </span>
-                      ) : null}
-                    </span>
-                    <span className="row-arrow" aria-hidden="true">
-                      ↗
-                    </span>
-                  </a>
-                </li>
-              );
-            })}
-          </ol>
+        {/* 1. Company identity */}
+        <section className="plaque" aria-label="company">
+          <img
+            src="/brand/sv-monogram.svg"
+            alt=""
+            className="sv-monogram"
+            width={48}
+            height={60}
+          />
+          {identity ? <p className="colophon">{identity}</p> : null}
         </section>
+
+        {/* 2. DOT. Gallery + COMMA client work strip */}
+        <section className="plaque" aria-label="client work">
+          {client ? <p className="note client-strip">{client}</p> : null}
+        </section>
+
+        {/* SOK-349b: three quiet abstract frames (CSS chrome only) between client strip and BlinkLive */}
+        <section className="plaque" aria-label="frames">
+          <div className="frames">
+            {operations ? (
+              <div className="frame">
+                <div className="frame-chrome" aria-hidden="true"></div>
+                <div className="frame-body">
+                  <span className="frame-rule"></span>
+                  <span className="frame-rule short"></span>
+                </div>
+                <span className="frame-label">{operations}</span>
+              </div>
+            ) : null}
+            {documents ? (
+              <div className="frame">
+                <div className="frame-chrome" aria-hidden="true"></div>
+                <div className="frame-body">
+                  <span className="frame-rule"></span>
+                  <span className="frame-rule"></span>
+                  <span className="frame-rule short"></span>
+                </div>
+                <span className="frame-label">{documents}</span>
+              </div>
+            ) : null}
+            {live ? (
+              <div className="frame">
+                <div className="frame-chrome" aria-hidden="true"></div>
+                <div className="frame-body">
+                  <span className="frame-rule short"></span>
+                  <span className="frame-rule"></span>
+                </div>
+                <span className="frame-label">{live}</span>
+              </div>
+            ) : null}
+          </div>
+        </section>
+
+        {/* 3. BlinkLive alone */}
+        <section className="plaque" aria-label="BlinkLive">
+          <p className="brand">BlinkLive</p>
+          {blink ? <p className="note">{blink}</p> : null}
+        </section>
+        <AdminCopyEditor
+          locale={locale}
+          initialIdentity={identity}
+          initialClient={client}
+          initialBlink={blink}
+        />
       </main>
     </Chrome>
   );

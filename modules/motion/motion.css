@@ -19,6 +19,9 @@
   /* View enter — the work list settles into place once, never hidden. */
   --m-view-enter: m-view-enter var(--motion-enter);
 
+  /* Plaque settle — plaque sections settle into place once on enter. */
+  --m-plaque-settle: m-plaque-settle var(--motion-enter);
+ 
   /* Focus — the focus ring eases out to its offset. */
   --m-focus: outline-offset var(--motion-fast);
 }
@@ -32,10 +35,20 @@
   }
 }
 
+@keyframes m-plaque-settle {
+  from {
+    transform: translateY(4px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   :root {
     --m-row-lift: none;
     --m-view-enter: none;
+    --m-plaque-settle: none;
     --m-focus: none;
   }
 }

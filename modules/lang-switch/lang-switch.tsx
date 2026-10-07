@@ -36,9 +36,9 @@ type LangSwitchProps = {
   /** The locale the current document is rendered in. */
   locale: Locale;
   /**
-   * Path after the locale segment, e.g. `""` for the index or
-   * `"/work/sirenvenue-com"` for a case page. Each entry opens the same path in
-   * the target locale.
+    * Path after the locale segment, e.g. `""` for the index or
+    * `"/work/dot-gallery"` for a case page. Each entry opens the same path in
+    * the target locale. (sirenvenue-com example dropped per SOK-350.)
    */
   path?: string;
   /**

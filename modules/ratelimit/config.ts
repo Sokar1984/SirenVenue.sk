@@ -33,6 +33,8 @@ export const DEFAULT_PER_WINDOW = 30;
 export const ROUTE_LIMITS = {
   "ai.door": AI_DOOR_PER_WINDOW,
   "ai.stream": AI_DOOR_PER_WINDOW,
+  "admin.login": AI_DOOR_PER_WINDOW,
+  "admin.copy": DEFAULT_PER_WINDOW,
 } as const;
 
 /** Resolve the limit for a route, falling back to the default. */

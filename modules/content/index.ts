@@ -21,19 +21,18 @@
  * Outage policy
  * -------------
  * A reader throws when Postgres cannot be reached, so callers that must tell
- * the truth about availability — `/api/v1/works`, the health probe — can answer
+ * the truth about availability - /api/v1/works, the health probe - can answer
  * 503 instead of inventing data. The home index (`app/[locale]/page.tsx`) is a
- * shell: the header, colophon, and legal footer are static, and only the work
- * rows depend on the database. Its render path catches a failed `getWorks` and
- * shows the index empty rather than crashing the request or falling back to the
- * seed file (`content/works.ts`), which is seed input and never a render source.
- * An empty index during an outage is honest; a hardcoded list pretending to be
- * live data is exactly the failure this module exists to prevent.
+ * shell: the header, identity text, and legal footer are static. A database
+ * outage on home shows the plaque without live data. An empty or partial render
+ * during outage is honest; pretending to have live data is exactly the failure
+ * this module exists to prevent.
  */
 import { unstable_cache, revalidateTag } from "next/cache";
 import { company, contact } from "../../content/legal";
 import { defaultLocale } from "../i18n";
 import { prisma } from "./db";
+import { createHash, randomBytes } from "node:crypto";
 
 /** Role vocabulary fixed by the schema's `WorkRole` enum. */
 export type WorkRole = "product" | "live" | "gallery_ops" | "systems";
@@ -63,6 +62,12 @@ export type LocaleRecord = {
   sortOrder: number;
 };
 
+export type HomepageCopy = {
+  identity: string | null;
+  client: string | null;
+  blink: string | null;
+};
+
 /**
  * Cache tags owned by the content module. Keep in sync with the `unstable_cache`
  * calls below; anything that writes content must revalidate these.
@@ -71,15 +76,19 @@ export const CONTENT_TAGS = {
   works: "content:works",
   legal: "content:legal",
   locales: "content:locales",
+  copy: "content:copy",
 } as const;
 
 export type ContentTag = (typeof CONTENT_TAGS)[keyof typeof CONTENT_TAGS];
 
-/**
- * Wraps a reader in `unstable_cache` under a tag. When no Next incremental
- * cache is present (CLI, seed, scripts) it transparently reads through, so the
- * public API is identical inside and outside a request.
- */
+export function hashPassword(raw: string): string {
+  return createHash("sha256").update(raw, "utf8").digest("hex");
+}
+
+export function hashToken(raw: string): string {
+  return createHash("sha256").update(raw, "utf8").digest("hex");
+}
+
 function cachedRead<Args extends readonly unknown[], Result>(
   keyParts: string[],
   tags: ContentTag[],
@@ -203,9 +212,54 @@ const readLocales = cachedRead(
   },
 );
 
+const readHomepageCopy = cachedRead(
+  ["content", "homepageCopy"],
+  [CONTENT_TAGS.copy],
+  async (locale: string): Promise<HomepageCopy> => {
+    const keys = ["home.identity", "home.client", "home.blink"];
+    const rows = await prisma.message.findMany({
+      where: { key: { in: keys }, locale },
+      select: { key: true, value: true },
+    });
+    const byKey: Record<string, string> = {};
+    for (const r of rows) byKey[r.key] = r.value;
+    return {
+      identity: byKey["home.identity"] ?? null,
+      client: byKey["home.client"] ?? null,
+      blink: byKey["home.blink"] ?? null,
+    };
+  },
+);
+
 /** The locale catalogue in canonical display order. */
 export function getLocales(): Promise<LocaleRecord[]> {
   return readLocales();
+}
+
+export async function getHomepageCopy(locale: string): Promise<HomepageCopy> {
+  try {
+    return await readHomepageCopy(locale);
+  } catch {
+    return { identity: null, client: null, blink: null };
+  }
+}
+
+export async function setHomepageCopy(
+  locale: string,
+  partial: Partial<{ identity: string; client: string; blink: string }>,
+): Promise<void> {
+  const pairs: Array<[string, string]> = [];
+  if (partial.identity !== undefined) pairs.push(["home.identity", partial.identity]);
+  if (partial.client !== undefined) pairs.push(["home.client", partial.client]);
+  if (partial.blink !== undefined) pairs.push(["home.blink", partial.blink]);
+  for (const [key, value] of pairs) {
+    await prisma.message.upsert({
+      where: { key_locale: { key, locale } },
+      create: { key, locale, value, reviewed: true },
+      update: { value, reviewed: true },
+    });
+  }
+  revalidateContent(CONTENT_TAGS.copy);
 }
 
 /**
@@ -221,6 +275,57 @@ export function revalidateContent(
 ): void {
   const targets = tags.length > 0 ? new Set(tags) : new Set(Object.values(CONTENT_TAGS));
   for (const tag of targets) {
-    revalidateTag(tag);
+    try {
+      revalidateTag(tag);
+    } catch (e) {
+      if (!(e instanceof Error && /static generation store missing|incrementalCache missing/i.test(e.message))) {
+        throw e;
+      }
+    }
   }
 }
+
+export async function createAdminSession(userId: string): Promise<string> {
+  const raw = randomBytes(32).toString("hex");
+  const tokenHash = hashToken(raw);
+  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+  await prisma.adminSession.create({
+    data: { tokenHash, userId, expiresAt },
+  });
+  return raw;
+}
+
+export async function revokeAdminSession(tokenHash: string): Promise<void> {
+  await prisma.adminSession.deleteMany({ where: { tokenHash } });
+}
+
+export async function getAdminSession(rawToken: string | null): Promise<{ userId: string } | null> {
+  if (!rawToken) return null;
+  const tokenHash = hashToken(rawToken);
+  const row = await prisma.adminSession.findUnique({
+    where: { tokenHash },
+    select: { userId: true, expiresAt: true },
+  });
+  if (!row || row.expiresAt <= new Date()) return null;
+  return { userId: row.userId };
+}
+
+export async function ensureAdminUserFromEnv(): Promise<void> {
+  const pw = process.env.ADMIN_PASSWORD;
+  if (!pw) return;
+  const exists = await prisma.adminUser.findFirst({ select: { id: true } });
+  if (exists) return;
+  const passwordHash = hashPassword(pw);
+  await prisma.adminUser.create({ data: { passwordHash } });
+}
+
+export async function authenticateAdmin(password: string): Promise<{ userId: string } | null> {
+  await ensureAdminUserFromEnv();
+  const passwordHash = hashPassword(password);
+  const row = await prisma.adminUser.findFirst({
+    where: { passwordHash },
+    select: { id: true },
+  });
+  return row ? { userId: row.id } : null;
+}
+
