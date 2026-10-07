@@ -21,14 +21,12 @@
  * Outage policy
  * -------------
  * A reader throws when Postgres cannot be reached, so callers that must tell
- * the truth about availability — `/api/v1/works`, the health probe — can answer
+ * the truth about availability - /api/v1/works, the health probe - can answer
  * 503 instead of inventing data. The home index (`app/[locale]/page.tsx`) is a
- * shell: the header, colophon, and legal footer are static, and only the work
- * rows depend on the database. Its render path catches a failed `getWorks` and
- * shows the index empty rather than crashing the request or falling back to the
- * seed file (`content/works.ts`), which is seed input and never a render source.
- * An empty index during an outage is honest; a hardcoded list pretending to be
- * live data is exactly the failure this module exists to prevent.
+ * shell: the header, identity text, and legal footer are static. A database
+ * outage on home shows the plaque without live data. An empty or partial render
+ * during outage is honest; pretending to have live data is exactly the failure
+ * this module exists to prevent.
  */
 import { unstable_cache, revalidateTag } from "next/cache";
 import { company, contact } from "../../content/legal";

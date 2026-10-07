@@ -49,7 +49,7 @@ export function localeLabel(locale: Locale): string {
  * Preference order follows the header's `q` weights. An exact tag wins
  * (`es-VE` -> `es-ve`), otherwise the base language is tried (`en-US` -> `en`).
  * Venezuelan Spanish is only ever selected by an explicit `es-ve`/`es-VE`
- * range — a plain `es` maps to `es` and never to `es-ve`. Returns `undefined`
+ * range - a plain `es` maps to `es` and never to `es-ve`. Returns `undefined`
  * when the header matches nothing so the caller can fall back.
  */
 export function matchLocale(

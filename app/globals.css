@@ -144,6 +144,42 @@ a:not(.row-link):hover {
   text-wrap: balance;
 }
 
+/* ---- plaque (vision plaque on home per SOK-348) ----
+   Company identity uses the monogram. Client strip for DOT + COMMA.
+   BlinkLive stands alone. No rows, no work list on index. */
+
+.plaque {
+  border-top: 1px solid var(--line);
+  padding: 1rem 0.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.plaque + .plaque {
+  border-top: none;
+  padding-top: 0.5rem;
+}
+
+.sv-monogram {
+  display: block;
+  width: 3rem;
+  height: auto;
+  margin-bottom: 0.25rem;
+}
+
+.brand {
+  margin: 0;
+  font-size: var(--fs-row-name);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.client-strip {
+  font-size: var(--fs-note);
+  line-height: 1.5;
+}
+
 /* ---- work mark ----
    DOT. Gallery is the only case page with an asset, so it is the only one that
    draws a mark. It is a modest identifier, not a hero: the size rides the
@@ -184,6 +220,7 @@ a:not(.row-link):hover {
 main {
   flex: 1;
   display: flex;
+  flex-direction: column;
 }
 
 .index {
