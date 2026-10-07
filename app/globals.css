@@ -154,6 +154,7 @@ a:not(.row-link):hover {
   display: flex;
   flex-direction: column;
   gap: 0.625rem;
+  animation: var(--m-plaque-settle);
 }
 
 .plaque + .plaque {
