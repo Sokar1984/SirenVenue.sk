@@ -319,3 +319,13 @@ export async function ensureAdminUserFromEnv(): Promise<void> {
   await prisma.adminUser.create({ data: { passwordHash } });
 }
 
+export async function authenticateAdmin(password: string): Promise<{ userId: string } | null> {
+  await ensureAdminUserFromEnv();
+  const passwordHash = hashPassword(password);
+  const row = await prisma.adminUser.findFirst({
+    where: { passwordHash },
+    select: { id: true },
+  });
+  return row ? { userId: row.id } : null;
+}
+

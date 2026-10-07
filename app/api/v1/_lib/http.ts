@@ -18,7 +18,8 @@ export type ApiErrorCode =
   | "unauthorized"
   | "rate_limited"
   | "ai_door_disabled"
-  | "provider_unconfigured";
+  | "provider_unconfigured"
+  | "invalid_request";
 
 /** Builds a JSON error response with the one shared envelope. */
 export function apiError(
