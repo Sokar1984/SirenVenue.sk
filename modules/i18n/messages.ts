@@ -5,9 +5,9 @@
  * What belongs here
  * -----------------
  * Short, structural strings: the colophon line, section labels, an `aria-label`
- * or two, and the 404 copy. Product names never belong here. `SirenVenue.com`,
- * `BlinkLive`, and `DOT. Gallery` are brands: they are spelled the same in every
- * locale and are translated by no one.
+ * or two, and the 404 copy. Product names never belong here. `BlinkLive`
+ * and `DOT. Gallery` are brands: they are spelled the same in every locale and
+ * are translated by no one. (SirenVenue.com tile removed per SOK-350.)
  *
  * Where the strings live at runtime
  * ---------------------------------

@@ -9,8 +9,8 @@
  * Scraping those once put fields in this file describing other people's
  * projects, and mis-stated what this company site is.
  *
- * The vision's own portfolio list, verbatim:
- *   - SirenVenue.com — live venue product
+ * The vision's own portfolio list, verbatim (SirenVenue.com tile dropped per
+ * content policy SOK-350; DOT. Sklad kept out of public tiles):
  *   - BlinkLive — live camera / LiveKit stack
  *   - DOT. Gallery / AMB — inventory, staff UI, redesign
  *   - AI / ops systems — only if we want "systems" on the shelf without
@@ -31,12 +31,6 @@ export type Work = {
 
 export const works: Work[] = [
   {
-    name: "SirenVenue.com",
-    role: "product",
-    href: "https://sirenvenue.com",
-    descriptor: "Live venue product",
-  },
-  {
     name: "BlinkLive",
     role: "live",
     href: "https://blinklive.app",
@@ -48,8 +42,9 @@ export const works: Work[] = [
     href: "https://dotgallery.sk",
     descriptor: "Inventory, staff UI, redesign",
   },
-  // Deliberately NOT added, pending Matus's word:
-  //   - DOT. sklad and the AMB 2026 page — rows I built from GitHub and another
-  //     agent's brief. The vision folds them into "DOT. Gallery / AMB" above.
+  // Deliberately NOT added (per content policy; no warehouse / Sklad tile):
+  //   - DOT. sklad and the AMB 2026 page — the vision folds them into
+  //     "DOT. Gallery / AMB" above.
   //   - "AI / ops systems" — the vision lists it as optional ("only if we want").
+  //   - SirenVenue.com — removed per SOK-350.
 ];

@@ -3,8 +3,9 @@
  *
  * Source of truth for the works remains `content/works.ts`; this script only
  * projects those values into `Work` / `WorkTranslation`, so the site can read
- * them through `modules/content`. The locale catalogue comes from the i18n
- * module's canonical order.
+ * them through `modules/content`. Stale published works (e.g. dropped
+ * SirenVenue.com tile) are unpublished so they no longer appear in getWorks.
+ * The locale catalogue comes from the i18n module's canonical order.
  *
  * The chrome strings come from `modules/i18n/messages.ts` and are projected into
  * `Message`. `sk` and `en` are authored by the project and seeded reviewed. The
@@ -101,6 +102,22 @@ async function main(): Promise<void> {
     console.log(
       `seeded work ${slug} (${role}) with ${locales.length} translations`,
     );
+  }
+
+  // Unpublish works no longer present in content/works.ts (e.g. dropped
+  // SirenVenue.com tile per SOK-350). This keeps getWorks() and link checks
+  // from surfacing removed tiles. Existing rows stay for history; only
+  // published flag changes.
+  const currentSlugs = new Set(works.map((w) => slugify(w.name)));
+  const stale = await prisma.work.findMany({
+    where: { published: true },
+    select: { id: true, slug: true },
+  });
+  for (const w of stale) {
+    if (!currentSlugs.has(w.slug)) {
+      await prisma.work.update({ where: { id: w.id }, data: { published: false } });
+      console.log(`unpublished stale work ${w.slug} (per seed list)`);
+    }
   }
 
   for (const [sortOrder, code] of locales.entries()) {

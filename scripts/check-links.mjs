@@ -2,11 +2,12 @@
 /**
  * Link-integrity check for the plaque.
  *
- * The works on this page are other teams' apps. A tile that points at a dead
- * URL is the loudest possible failure here, so this check reads every published
- * work's `href` through the content module (never a raw query), adds the
- * contact email and the footer links, probes each over the network, and prints
- * the final resolved URL and status.
+ * The works on this page are other teams' apps. (SirenVenue.com tile and
+ * warehouse framing dropped per SOK-350; see content/works.ts.) A tile that
+ * points at a dead URL is the loudest possible failure here, so this check
+ * reads every published work's `href` through the content module (never a raw
+ * query), adds the contact email and the footer links, probes each over the
+ * network, and prints the final resolved URL and status.
  *
  * Dependency-free: Node's global `fetch` does the HTTP and the only imports are
  * built-ins. The content module is reached through its public entry, exactly

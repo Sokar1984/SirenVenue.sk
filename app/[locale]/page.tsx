@@ -20,8 +20,8 @@ export default async function Home({
 
   // Every chrome string comes from the catalog. A `null` result — an absent or
   // declared-missing key — omits the element; English is never rendered in its
-  // place. Product names (`SirenVenue.com`, `BlinkLive`, `DOT. Gallery`) are
-  // brands and are not catalog entries.
+  // place. Product names (`BlinkLive`, `DOT. Gallery`) are brands and are not
+  // catalog entries. (SirenVenue.com removed per SOK-350.)
   const colophon = message(locale, "colophon");
   const workLabel = message(locale, "work.label");
   const workCount = message(locale, "work.count", { count: works.length });
@@ -43,9 +43,9 @@ export default async function Home({
               const role = work.role.replace(/_/g, " ");
               const descriptor = work.descriptor?.replace(/_/g, " ") ?? null;
               // The descriptor repeats the role when it contains it (after a
-              // case-insensitive trim), not only when the two are identical:
-              // "Live venue product" carries "product". Containment is the
-              // repeat; an unrelated descriptor keeps its role.
+              // case-insensitive trim), not only when the two are identical.
+              // Containment is the repeat; an unrelated descriptor keeps its role.
+              // (Example of "Live venue product" was from the removed .com tile.)
               const repeatsRole =
                 descriptor !== null &&
                 descriptor

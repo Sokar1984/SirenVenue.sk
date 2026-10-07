@@ -4,7 +4,7 @@
  *
  * Builds the app, starts the production server on a free port, and asserts the
  * things a plaque cannot get wrong: the bare root redirects to a locale, both
- * served locales render, the three work names and the company's IČO are on the
+ * served locales render, the work names (from seed) and the company's IČO are on the
  * page, and every locale-switcher entry leads somewhere valid.
  *
  * Dependency-free: Node's global `fetch` and the built `next start` are enough.
