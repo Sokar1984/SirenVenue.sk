@@ -185,6 +185,54 @@ a:not(.row-link):hover {
   line-height: 1.45;
 }
 
+.frames {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-start;
+}
+.frame {
+  flex: 1 1 0;
+  min-width: 0;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  height: 3.1rem;
+  display: flex;
+  flex-direction: column;
+}
+.frame-chrome {
+  height: 0.3rem;
+  border-bottom: 1px solid var(--line);
+  flex: none;
+}
+.frame-body {
+  flex: 1;
+  padding: 0.35rem 0.2rem 0.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-height: 0;
+  justify-content: center;
+}
+.frame-rule {
+  display: block;
+  height: 1px;
+  background: var(--line);
+  width: 100%;
+}
+.frame-rule.short {
+  width: 55%;
+}
+.frame-label {
+  flex: none;
+  padding: 0 0.2rem 0.1rem;
+  font-size: 0.65rem;
+  color: var(--dim);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* ---- work mark ----
    DOT. Gallery is the only case page with an asset, so it is the only one that
    draws a mark. It is a modest identifier, not a hero: the size rides the

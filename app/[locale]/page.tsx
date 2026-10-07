@@ -18,6 +18,9 @@ export default async function Home({
   const identity = copy.identity ?? message(locale, "home.identity");
   const client = copy.client ?? message(locale, "home.client");
   const blink = copy.blink ?? message(locale, "home.blink");
+  const operations = message(locale, "home.operations");
+  const documents = message(locale, "home.documents");
+  const live = message(locale, "home.live");
 
   return (
     <Chrome locale={locale} path="" home>
@@ -37,6 +40,43 @@ export default async function Home({
         {/* 2. DOT. Gallery + COMMA client work strip */}
         <section className="plaque" aria-label="client work">
           {client ? <p className="note client-strip">{client}</p> : null}
+        </section>
+
+        {/* SOK-349b: three quiet abstract frames (CSS chrome only) between client strip and BlinkLive */}
+        <section className="plaque" aria-label="frames">
+          <div className="frames">
+            {operations ? (
+              <div className="frame">
+                <div className="frame-chrome" aria-hidden="true"></div>
+                <div className="frame-body">
+                  <span className="frame-rule"></span>
+                  <span className="frame-rule short"></span>
+                </div>
+                <span className="frame-label">{operations}</span>
+              </div>
+            ) : null}
+            {documents ? (
+              <div className="frame">
+                <div className="frame-chrome" aria-hidden="true"></div>
+                <div className="frame-body">
+                  <span className="frame-rule"></span>
+                  <span className="frame-rule"></span>
+                  <span className="frame-rule short"></span>
+                </div>
+                <span className="frame-label">{documents}</span>
+              </div>
+            ) : null}
+            {live ? (
+              <div className="frame">
+                <div className="frame-chrome" aria-hidden="true"></div>
+                <div className="frame-body">
+                  <span className="frame-rule short"></span>
+                  <span className="frame-rule"></span>
+                </div>
+                <span className="frame-label">{live}</span>
+              </div>
+            ) : null}
+          </div>
         </section>
 
         {/* 3. BlinkLive alone */}

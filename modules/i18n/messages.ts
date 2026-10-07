@@ -67,6 +67,9 @@ export const messageKeys = [
   "home.identity",
   "home.client",
   "home.blink",
+  "home.operations",
+  "home.documents",
+  "home.live",
 ] as const;
 
 export type MessageKey = (typeof messageKeys)[number];
@@ -97,6 +100,9 @@ export const catalog: MessageCatalog = {
     "home.client":
       "DOT. Gallery + COMMA modernizácia. Inventár, dokumenty, udalosti, predaj, automatizácia naprieč doménami. AI sekretárka na podanie a granty. Sklad je interná chrbtica, nie verejná produktová dlaždica.",
     "home.blink": "Živá kamera pre priestory, ktoré potrebujú oči.",
+    "home.operations": "operácie",
+    "home.documents": "dokumenty",
+    "home.live": "live",
   },
   en: {
     skip: "Skip to main content",
@@ -110,6 +116,9 @@ export const catalog: MessageCatalog = {
     "home.client":
       "DOT. Gallery + COMMA modernization. Inventory, documents, events, sales, automation across domains. AI secretary for filing and grants. Sklad is the internal backbone, not a public product tile.",
     "home.blink": "Live camera for rooms that need eyes.",
+    "home.operations": "operations",
+    "home.documents": "documents",
+    "home.live": "live",
   },
   de: {
     skip: "Zum Hauptinhalt springen",
@@ -123,6 +132,9 @@ export const catalog: MessageCatalog = {
     "home.client":
       "DOT. Gallery + COMMA Modernisierung. Inventar, Dokumente, Veranstaltungen, Verkauf, Automatisierung über Domänen. KI Sekretärin für Ablage und Förderungen. Sklad ist das interne Rückgrat, keine öffentliche Produktkachel.",
     "home.blink": "Live Kamera für Räume, die Augen brauchen.",
+    "home.operations": "operations",
+    "home.documents": "documents",
+    "home.live": "live",
   },
   es: {
     skip: "Saltar al contenido principal",
@@ -136,6 +148,9 @@ export const catalog: MessageCatalog = {
     "home.client":
       "DOT. Gallery + modernización COMMA. Inventario, documentos, eventos, ventas, automatización entre dominios. Secretaria de IA para archivos y subvenciones. Sklad es la columna interna, no una baldosa de producto público.",
     "home.blink": "Cámara en vivo para salas que necesitan ojos.",
+    "home.operations": "operations",
+    "home.documents": "documents",
+    "home.live": "live",
   },
   "es-ve": {
     skip: "Saltar al contenido principal",
@@ -149,6 +164,9 @@ export const catalog: MessageCatalog = {
     "home.client":
       "DOT. Gallery + modernización COMMA. Inventario, documentos, eventos, ventas, automatización entre dominios. Secretaria de IA para archivos y subvenciones. Sklad es la columna interna, no una baldosa de producto público.",
     "home.blink": "Cámara en vivo para salas que necesitan ojos.",
+    "home.operations": "operations",
+    "home.documents": "documents",
+    "home.live": "live",
   },
   hu: {
     skip: "Ugrás a fő tartalomra",
@@ -162,6 +180,9 @@ export const catalog: MessageCatalog = {
     "home.client":
       "DOT. Gallery + COMMA modernizáció. Leltár, dokumentumok, események, értékesítés, automatizálás tartományok között. AI titkár irattárhoz és támogatásokhoz. Sklad a belső gerinc, nem nyilvános termékcsempe.",
     "home.blink": "Élő kamera olyan helyiségekhez, amelyeknek szemek kellenek.",
+    "home.operations": "operations",
+    "home.documents": "documents",
+    "home.live": "live",
   },
   cs: {
     skip: "Přeskočit na hlavní obsah",
@@ -175,6 +196,9 @@ export const catalog: MessageCatalog = {
     "home.client":
       "DOT. Gallery + COMMA modernizace. Inventář, dokumenty, události, prodej, automatizace napříč doménami. AI sekretářka pro podání a granty. Sklad je interní páteř, ne veřejná produktová dlaždice.",
     "home.blink": "Živá kamera pro místnosti, které potřebují oči.",
+    "home.operations": "operations",
+    "home.documents": "documents",
+    "home.live": "live",
   },
   uk: {
     skip: "Перейти до основного вмісту",
@@ -188,6 +212,9 @@ export const catalog: MessageCatalog = {
     "home.client":
       "DOT. Gallery + COMMA модернізація. Інвентар, документи, події, продажі, автоматизація між доменами. AI секретар для подання та грантів. Sklad є внутрішнім хребтом, не публічним продуктом.",
     "home.blink": "Жива камера для приміщень, яким потрібні очі.",
+    "home.operations": "operations",
+    "home.documents": "documents",
+    "home.live": "live",
   },
   ru: {
     skip: "Перейти к основному содержанию",
@@ -201,6 +228,9 @@ export const catalog: MessageCatalog = {
     "home.client":
       "DOT. Gallery + COMMA модернизация. Инвентарь, документы, события, продажи, автоматизация между доменами. AI секретарь для подачи и грантов. Sklad это внутренний хребет, не публичный продукт.",
     "home.blink": "Живая камера для помещений, которым нужны глаза.",
+    "home.operations": "operations",
+    "home.documents": "documents",
+    "home.live": "live",
   },
 };
 
