@@ -94,3 +94,21 @@ model RateLimit {
 
   @@id([bucket, windowStart])
 }
+
+model AdminUser {
+  id           String         @id @default(cuid())
+  passwordHash String
+  createdAt    DateTime       @default(now())
+  sessions     AdminSession[]
+}
+
+model AdminSession {
+  id        String     @id @default(cuid())
+  tokenHash String     @unique
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime   @default(now())
+  user      AdminUser  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([expiresAt])
+}
