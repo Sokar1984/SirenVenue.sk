@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
 import { isLocale, message } from "@/modules/i18n";
 import { Chrome } from "./layout";
+import { getHomepageCopy } from "@/modules/content";
+import { AdminCopyEditor } from "./AdminCopyEditor";
 
 export default async function Home({
   params,
@@ -12,12 +14,10 @@ export default async function Home({
     notFound();
   }
 
-  // Every string comes from the catalog. A `null` result for absent or
-  // declared-missing key omits the element. English never appears instead.
-  // Product names like BlinkLive and DOT. Gallery are brands, not catalog keys.
-  const identity = message(locale, "home.identity");
-  const client = message(locale, "home.client");
-  const blink = message(locale, "home.blink");
+  const copy = await getHomepageCopy(locale);
+  const identity = copy.identity ?? message(locale, "home.identity");
+  const client = copy.client ?? message(locale, "home.client");
+  const blink = copy.blink ?? message(locale, "home.blink");
 
   return (
     <Chrome locale={locale} path="" home>
@@ -44,6 +44,12 @@ export default async function Home({
           <p className="brand">BlinkLive</p>
           {blink ? <p className="note">{blink}</p> : null}
         </section>
+        <AdminCopyEditor
+          locale={locale}
+          initialIdentity={identity}
+          initialClient={client}
+          initialBlink={blink}
+        />
       </main>
     </Chrome>
   );
