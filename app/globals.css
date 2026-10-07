@@ -150,22 +150,22 @@ a:not(.row-link):hover {
 
 .plaque {
   border-top: 1px solid var(--line);
-  padding: 1rem 0.25rem;
+  padding: 1.125rem 0.25rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.625rem;
 }
 
 .plaque + .plaque {
   border-top: none;
-  padding-top: 0.5rem;
+  padding-top: 0.75rem;
 }
 
 .sv-monogram {
   display: block;
   width: 3rem;
   height: auto;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.625rem;
 }
 
 .brand {
@@ -176,8 +176,13 @@ a:not(.row-link):hover {
 }
 
 .client-strip {
-  font-size: var(--fs-note);
-  line-height: 1.5;
+  font-size: var(--fs-foot);
+  line-height: 1.45;
+}
+
+.brand + .note {
+  font-size: var(--fs-foot);
+  line-height: 1.45;
 }
 
 /* ---- work mark ----
