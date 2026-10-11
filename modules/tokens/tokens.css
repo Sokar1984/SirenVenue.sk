@@ -7,22 +7,24 @@
 :root {
   color-scheme: dark;
 
-  /* Palette.
-     Contrast on --bg #08080a, measured (WCAG 2.1 relative luminance):
-     --fg 18.21:1   --muted 6.99:1   --dim 4.70:1
-     Every token used for text passes AA (4.5:1). --dim carries the smallest
-     type on the page, so it is the one that must not drift back down.
-     scripts/check-contrast.mjs enforces this at build time. */
-  --bg: #08080a;
-  --fg: #f4f4f5;
-  --muted: #9898a0;
-  --dim: #7a7a82;
-  --line: #232329;
-  --lift: rgba(255, 255, 255, 0.035);
+  /* Palette. Warm ink and ivory, taken from the SV monogram (#E8E4DC) so the
+     mark and the type are one material. One signal colour, used for exactly
+     one thing: the live point beside BlinkLive. Never for text.
+     Contrast on --bg #0e0d0b, measured (WCAG 2.1 relative luminance) and
+     enforced by scripts/check-contrast.mjs. --dim carries the smallest type,
+     so it is the one that must not drift down. */
+  --bg: #0e0d0b;
+  --fg: #e8e4dc;
+  --muted: #a8a299;
+  --dim: #8a847b;
+  --line: #2a2723;
+  --lift: rgba(232, 228, 220, 0.04);
+  --signal: #e2553b;
 
   /* Type family. `--font-sans` is declared only by modules/tokens/font.ts
      (next/font, self-hosted); this fallback is what surfaces without the font
      class use, so the family still swaps from modules/tokens alone. */
+  --font-serif-fallback: ui-serif, Georgia, "Times New Roman", serif;
   --font-fallback: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
     Helvetica, Arial, sans-serif;
 
@@ -41,13 +43,21 @@
   --fs-row-meta: 0.8125rem;
   --fs-row-arrow: 0.8rem;
   --fs-foot: 0.82rem;
+  /* Display tier: the lead is the page. Serif, large, set tight. */
+  --fs-lead: clamp(2.75rem, 7.2vw, 6.25rem);
+  --fs-identity: clamp(1.05rem, 1.45vw, 1.25rem);
+  --fs-entry: clamp(1.9rem, 3.6vw, 3rem);
 
   /* Spacing */
   --pad: clamp(1.25rem, 5vw, 3.5rem);
   --maxw: 68rem;
   --shell-gap: clamp(1.5rem, 3.5vw, 3rem);
+  --section-gap: clamp(4.5rem, 12vw, 9rem);
+  --measure: 34ch;
 
   /* Motion */
   --motion-fast: 0.18s ease;
   --motion-enter: 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-reveal: 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  --motion-pulse: 2.4s ease-in-out;
 }

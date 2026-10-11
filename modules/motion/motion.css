@@ -22,6 +22,15 @@
   /* Plaque settle — plaque sections settle into place once on enter. */
   --m-plaque-settle: m-plaque-settle var(--motion-enter);
  
+  /* Reveal — a line of the lead rises out of its own mask, once, on load.
+     Staggered by the page with --i. Opacity is never animated from zero so
+     text is always readable if the animation never runs. */
+  --m-reveal: m-reveal var(--motion-reveal) both;
+
+  /* Live — the BlinkLive point breathes. The only looping motion on the site,
+     and it means something: the camera is live. */
+  --m-live: m-live var(--motion-pulse) infinite;
+
   /* Focus — the focus ring eases out to its offset. */
   --m-focus: outline-offset var(--motion-fast);
 }
@@ -44,11 +53,34 @@
   }
 }
 
+@keyframes m-reveal {
+  from {
+    transform: translateY(0.35em);
+    opacity: 0.35;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes m-live {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--signal) 45%, transparent);
+  }
+  60% {
+    box-shadow: 0 0 0 0.45rem color-mix(in srgb, var(--signal) 0%, transparent);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   :root {
     --m-row-lift: none;
     --m-view-enter: none;
     --m-plaque-settle: none;
     --m-focus: none;
+    --m-reveal: none;
+    --m-live: none;
   }
 }

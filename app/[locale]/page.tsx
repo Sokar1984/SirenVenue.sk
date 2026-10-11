@@ -1,9 +1,23 @@
 import { notFound } from "next/navigation";
 import { isLocale, message } from "@/modules/i18n";
-import { Chrome } from "./layout";
 import { getHomepageCopy } from "@/modules/content";
-import { AdminCopyEditor } from "./AdminCopyEditor";
+import { Chrome } from "./layout";
 
+type Entry = {
+  name: string;
+  role: string | null;
+  note: string | null;
+  href?: string;
+  live?: boolean;
+};
+
+/**
+ * Site v3 home. Three moves, nothing else:
+ *   1. the lead (serif, the page's one loud thing) and a quiet identity line,
+ *   2. "Now": a typeset index of what is on the bench today,
+ *   3. an open, unnumbered last line that implies the list has no edge.
+ * No cards, no frames, no call to action. The work and the open line say it.
+ */
 export default async function Home({
   params,
 }: {
@@ -14,82 +28,115 @@ export default async function Home({
     notFound();
   }
 
+  // Database overrides (admin copy API) win for identity and BlinkLive.
   const copy = await getHomepageCopy(locale);
+  const lead = message(locale, "home.lead");
   const identity = copy.identity ?? message(locale, "home.identity");
-  const client = copy.client ?? message(locale, "home.client");
-  const blink = copy.blink ?? message(locale, "home.blink");
-  const operations = message(locale, "home.operations");
-  const documents = message(locale, "home.documents");
-  const live = message(locale, "home.live");
+  const now = message(locale, "home.now");
+  const client = message(locale, "home.client");
+  const own = message(locale, "home.own");
+  const next = message(locale, "home.next");
+
+  const entries: Entry[] = [
+    {
+      name: "DOT. Gallery",
+      role: client,
+      note: message(locale, "home.dot"),
+      href: "https://dotgallery.sk",
+    },
+    { name: "COMMA gallery", role: client, note: message(locale, "home.comma") },
+    {
+      name: "BlinkLive",
+      role: own,
+      note: copy.blink ?? message(locale, "home.blink"),
+      href: "https://blinklive.app",
+      live: true,
+    },
+  ];
+
+  // The lead is split on sentence ends so each sentence gets its own line and
+  // its own reveal. Works for every locale because every lead is two sentences.
+  const leadLines = lead ? lead.split(/(?<=\.)\s+/) : [];
 
   return (
     <Chrome locale={locale} path="" home>
-      <main id="main" tabIndex={-1}>
-        {/* 1. Company identity */}
-        <section className="plaque" aria-label="company">
-          <img
-            src="/brand/sv-monogram.svg"
-            alt=""
-            className="sv-monogram"
-            width={48}
-            height={60}
-          />
-          {identity ? <p className="colophon">{identity}</p> : null}
+      <main id="main" tabIndex={-1} className="home">
+        <section className="opening" aria-label="SirenVenue">
+          {leadLines.length > 0 ? (
+            <h1 className="lead">
+              {leadLines.map((line, i) => (
+                <span key={line} className={`lead-line lead-line-${i + 1}`}>
+                  {line}
+                </span>
+              ))}
+            </h1>
+          ) : null}
+          {identity ? <p className="identity">{identity}</p> : null}
         </section>
 
-        {/* 2. DOT. Gallery + COMMA client work strip */}
-        <section className="plaque" aria-label="client work">
-          {client ? <p className="note client-strip">{client}</p> : null}
-        </section>
-
-        {/* SOK-349b: three quiet abstract frames (CSS chrome only) between client strip and BlinkLive */}
-        <section className="plaque" aria-label="frames">
-          <div className="frames">
-            {operations ? (
-              <div className="frame">
-                <div className="frame-chrome" aria-hidden="true"></div>
-                <div className="frame-body">
-                  <span className="frame-rule"></span>
-                  <span className="frame-rule short"></span>
+        <section className="now" aria-labelledby="now-label">
+          {now ? (
+            <h2 id="now-label" className="label now-label">
+              {now}
+            </h2>
+          ) : null}
+          <ol className="ledger">
+            {entries.map((entry, i) => {
+              const inner = (
+                <>
+                  <span className="ledger-no" aria-hidden="true">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="ledger-name">
+                    {entry.name}
+                    {entry.live ? (
+                      <span className="live-point" aria-hidden="true" />
+                    ) : null}
+                  </span>
+                  <span className="ledger-meta">
+                    {entry.role ? (
+                      <span className="ledger-role">{entry.role}</span>
+                    ) : null}
+                    {entry.note ? (
+                      <span className="ledger-note">{entry.note}</span>
+                    ) : null}
+                  </span>
+                  {entry.href ? (
+                    <span className="ledger-arrow" aria-hidden="true">
+                      ↗
+                    </span>
+                  ) : null}
+                </>
+              );
+              return (
+                <li key={entry.name} className="ledger-row">
+                  {entry.href ? (
+                    <a
+                      className="ledger-entry is-link"
+                      href={entry.href}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {inner}
+                    </a>
+                  ) : (
+                    <div className="ledger-entry">{inner}</div>
+                  )}
+                </li>
+              );
+            })}
+            {next ? (
+              <li className="ledger-row is-open">
+                <div className="ledger-entry">
+                  <span className="ledger-no" aria-hidden="true">
+                    {String(entries.length + 1).padStart(2, "0")}
+                  </span>
+                  <span className="ledger-name ledger-next">{next}</span>
                 </div>
-                <span className="frame-label">{operations}</span>
-              </div>
+              </li>
             ) : null}
-            {documents ? (
-              <div className="frame">
-                <div className="frame-chrome" aria-hidden="true"></div>
-                <div className="frame-body">
-                  <span className="frame-rule"></span>
-                  <span className="frame-rule"></span>
-                  <span className="frame-rule short"></span>
-                </div>
-                <span className="frame-label">{documents}</span>
-              </div>
-            ) : null}
-            {live ? (
-              <div className="frame">
-                <div className="frame-chrome" aria-hidden="true"></div>
-                <div className="frame-body">
-                  <span className="frame-rule short"></span>
-                  <span className="frame-rule"></span>
-                </div>
-                <span className="frame-label">{live}</span>
-              </div>
-            ) : null}
-          </div>
+          </ol>
         </section>
-
-        {/* 3. BlinkLive alone */}
-        <section className="plaque" aria-label="BlinkLive">
-          <p className="brand">BlinkLive</p>
-          {blink ? <p className="note">{blink}</p> : null}
-        </section>
-        <AdminCopyEditor
-          locale={locale}
-          initialIdentity={identity}
-          initialClient={client}
-          initialBlink={blink}
-        />
       </main>
     </Chrome>
   );

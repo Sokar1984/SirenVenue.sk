@@ -6,19 +6,24 @@
  * import from.
  */
 /** Re-exported so the family is declared once, in modules/tokens/font.ts. */
-export { geist } from "./font";
+export { geist, serif } from "./font";
 
 export const tokens = {
   color: {
-    bg: "#08080a",
-    fg: "#f4f4f5",
-    muted: "#9898a0",
-    dim: "#7a7a82",
-    line: "#232329",
-    lift: "rgba(255, 255, 255, 0.035)",
+    bg: "#0e0d0b",
+    fg: "#e8e4dc",
+    muted: "#a8a299",
+    dim: "#8a847b",
+    line: "#2a2723",
+    lift: "rgba(232, 228, 220, 0.04)",
+    signal: "#e2553b",
   },
   font: {
     family: "var(--font-sans)",
+    serif: "var(--font-serif)",
+    lead: "clamp(2.75rem, 7.2vw, 6.25rem)",
+    identity: "clamp(1.05rem, 1.45vw, 1.25rem)",
+    entry: "clamp(1.9rem, 3.6vw, 3rem)",
     body: "16px",
     markName: "1rem",
     markLegal: "0.78rem",
@@ -36,9 +41,13 @@ export const tokens = {
     pad: "clamp(1.25rem, 5vw, 3.5rem)",
     maxw: "68rem",
     shellGap: "clamp(1.5rem, 3.5vw, 3rem)",
+    sectionGap: "clamp(4.5rem, 12vw, 9rem)",
+    measure: "34ch",
   },
   motion: {
     fast: "0.18s ease",
+    reveal: "0.9s cubic-bezier(0.16, 1, 0.3, 1)",
+    pulse: "2.4s ease-in-out",
   },
 } as const;
 

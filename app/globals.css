@@ -28,7 +28,7 @@ a {
 
 /* Row links carry their own hover affordance; the global underline must never
    reach one, or a single rule draws through the whole row. */
-a:not(.row-link):hover {
+a:not(.row-link):not(.ledger-entry):not(.mark-name):hover {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -106,9 +106,19 @@ a:not(.row-link):hover {
 }
 
 .mark-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
   font-size: var(--fs-mark-name);
   font-weight: 600;
   letter-spacing: -0.015em;
+}
+
+.mark-sv {
+  display: block;
+  width: 1.05rem;
+  height: auto;
+  transform: translateY(0.08em);
 }
 
 .mark-legal {
@@ -144,94 +154,188 @@ a:not(.row-link):hover {
   text-wrap: balance;
 }
 
-/* ---- plaque (vision plaque on home per SOK-348) ----
-   Company identity uses the monogram. Client strip for DOT + COMMA.
-   BlinkLive stands alone. No rows, no work list on index. */
+/* ---- home (site v3) ----
+   One loud thing (the serif lead), one quiet line, then a ledger. Rhythm comes
+   from two spacing values only: --section-gap between movements, hairlines
+   inside them. Nothing is boxed. */
 
-.plaque {
-  border-top: 1px solid var(--line);
-  padding: 1.125rem 0.25rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.625rem;
-  animation: var(--m-plaque-settle);
+.home {
+  gap: var(--section-gap);
+  padding-block: clamp(2.5rem, 9vw, 7rem) clamp(1rem, 4vw, 3rem);
 }
 
-.plaque + .plaque {
-  border-top: none;
-  padding-top: 0.75rem;
+.opening {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
 }
 
-.sv-monogram {
-  display: block;
-  width: 3rem;
-  height: auto;
-  margin-bottom: 0.625rem;
-}
-
-.brand {
+.lead {
   margin: 0;
-  font-size: var(--fs-row-name);
-  font-weight: 500;
+  font-family: var(--font-serif), var(--font-serif-fallback);
+  font-weight: 400;
+  font-size: var(--fs-lead);
+  line-height: 0.98;
   letter-spacing: -0.02em;
+  text-wrap: balance;
 }
 
-.client-strip {
-  font-size: var(--fs-foot);
-  line-height: 1.45;
-}
-
-.brand + .note {
-  font-size: var(--fs-foot);
-  line-height: 1.45;
-}
-
-.frames {
-  display: flex;
-  gap: 0.5rem;
-  justify-content: flex-start;
-}
-.frame {
-  flex: 1 1 0;
-  min-width: 0;
-  border: 1px solid var(--line);
-  background: var(--bg);
-  height: 3.1rem;
-  display: flex;
-  flex-direction: column;
-}
-.frame-chrome {
-  height: 0.3rem;
-  border-bottom: 1px solid var(--line);
-  flex: none;
-}
-.frame-body {
-  flex: 1;
-  padding: 0.35rem 0.2rem 0.1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-height: 0;
-  justify-content: center;
-}
-.frame-rule {
+.lead-line {
   display: block;
-  height: 1px;
-  background: var(--line);
-  width: 100%;
+  animation: var(--m-reveal);
 }
-.frame-rule.short {
-  width: 55%;
+
+/* Second sentence answers the first: set in italic, indented one step, and
+   arriving a beat later. The turn is the whole message. */
+.lead-line-2 {
+  font-style: italic;
+  color: var(--muted);
+  padding-left: clamp(1.5rem, 8vw, 7.5rem);
+  animation-delay: 0.14s;
 }
-.frame-label {
-  flex: none;
-  padding: 0 0.2rem 0.1rem;
-  font-size: 0.65rem;
+
+.identity {
+  margin: 0;
+  max-width: var(--measure);
+  margin-left: clamp(1.5rem, 8vw, 7.5rem);
+  font-size: var(--fs-identity);
+  line-height: 1.55;
+  color: var(--muted);
+  text-wrap: pretty;
+  animation: var(--m-reveal);
+  animation-delay: 0.28s;
+}
+
+.now {
+  display: grid;
+  grid-template-columns: minmax(0, 11rem) minmax(0, 1fr);
+  gap: 1rem clamp(1.5rem, 4vw, 3rem);
+  align-items: start;
+}
+
+.now-label {
+  margin: 0;
+  padding-top: 1.35rem;
+  font-weight: 500;
+}
+
+.ledger {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+
+.ledger-row {
+  border-bottom: 1px solid var(--line);
+}
+
+.ledger-entry {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr) 1.5rem;
+  grid-template-areas:
+    "no name arrow"
+    ". meta meta";
+  column-gap: clamp(0.6rem, 1.5vw, 1.25rem);
+  row-gap: 0.45rem;
+  align-items: baseline;
+  padding: clamp(1.1rem, 2.4vw, 1.75rem) 0;
+  text-decoration: none;
+}
+
+.ledger-no {
+  grid-area: no;
+  font-size: var(--fs-row-no);
+  letter-spacing: 0.1em;
+  font-variant-numeric: tabular-nums;
   color: var(--dim);
-  letter-spacing: 0.02em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+}
+
+.ledger-name {
+  grid-area: name;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-serif), var(--font-serif-fallback);
+  font-size: var(--fs-entry);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  transition: transform var(--motion-fast);
+}
+
+.ledger-meta {
+  grid-area: meta;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.9rem;
+  font-size: var(--fs-row-meta);
+  line-height: 1.5;
+}
+
+.ledger-role {
+  color: var(--dim);
+  font-size: var(--fs-label);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transform: translateY(-0.05em);
+}
+
+.ledger-note {
+  color: var(--muted);
+}
+
+.ledger-arrow {
+  grid-area: arrow;
+  justify-self: end;
+  color: var(--dim);
+  font-size: var(--fs-row-arrow);
+  transition: color var(--motion-fast), transform var(--motion-fast);
+}
+
+.ledger-entry.is-link:hover .ledger-name,
+.ledger-entry.is-link:focus-visible .ledger-name {
+  transform: translateX(0.3rem);
+}
+
+.ledger-entry.is-link:hover .ledger-arrow,
+.ledger-entry.is-link:focus-visible .ledger-arrow {
+  color: var(--fg);
+  transform: translate(0.15rem, -0.15rem);
+}
+
+/* The open line: numbered like the rest, but italic, dim and unruled at the
+   bottom, so the list reads as continuing rather than finished. */
+.ledger-row.is-open {
+  border-bottom: none;
+}
+
+.ledger-next {
+  font-style: italic;
+  color: var(--dim);
+}
+
+.live-point {
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--signal);
+  animation: var(--m-live);
+}
+
+@media (max-width: 720px) {
+  .now {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .now-label {
+    padding-top: 0;
+  }
+
+  .lead-line-2,
+  .identity {
+    padding-left: 0;
+    margin-left: 0;
+  }
 }
 
 /* ---- work mark ----
@@ -573,4 +677,82 @@ main {
 .lang-option[aria-selected="true"] {
   color: var(--fg);
   font-weight: 600;
+}
+
+/* ---- admin (admin.sirenvenue.sk) ----
+   One column, one field, one button. Same tokens as the site. */
+
+.admin {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: var(--pad);
+  font-family: var(--font-sans, var(--font-fallback));
+}
+
+.admin-main {
+  width: min(100%, 20rem);
+  display: grid;
+  gap: 1.5rem;
+}
+
+.admin-mark {
+  width: 2.25rem;
+  height: auto;
+}
+
+.admin-title {
+  margin: 0;
+  font-family: var(--font-serif), var(--font-serif-fallback);
+  font-weight: 400;
+  font-size: var(--fs-entry);
+  line-height: 1;
+}
+
+.admin-form {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.admin-input {
+  min-height: 2.75rem;
+  padding: 0 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--fg);
+  font: inherit;
+}
+
+.admin-input:focus-visible {
+  border-color: var(--dim);
+}
+
+.admin-button {
+  min-height: 2.75rem;
+  margin-top: 0.4rem;
+  border: 1px solid var(--fg);
+  border-radius: 4px;
+  background: var(--fg);
+  color: var(--bg);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--motion-fast), color var(--motion-fast);
+}
+
+.admin-button:hover {
+  background: transparent;
+  color: var(--fg);
+}
+
+.admin-button:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.admin-status {
+  margin: 0;
+  font-size: var(--fs-note);
+  color: var(--muted);
 }

@@ -6,7 +6,7 @@ import { company, contact } from "@/content/legal";
 import { enabledLocales, isLocale, message, type Locale } from "@/modules/i18n";
 import { LangSwitch } from "@/modules/lang-switch";
 import { organizationJsonLd, pageMetadata } from "@/modules/seo";
-import { geist } from "@/modules/tokens";
+import { geist, serif } from "@/modules/tokens";
 import "../globals.css";
 
 /** Per-locale title/description, `og:locale`, and hreflang alternates. */
@@ -58,7 +58,7 @@ export function Chrome({ locale, path, home = false, children }: ChromeProps) {
   const navLanguage = message(locale, "nav.language");
 
   return (
-    <div className={`shell ${geist.variable}`}>
+    <div className={`shell ${geist.variable} ${serif.variable}`}>
       {skip ? (
         <a className="skip" href="#main">
           {skip}
@@ -68,9 +68,13 @@ export function Chrome({ locale, path, home = false, children }: ChromeProps) {
       <header className="head">
         <div className="mark">
           {home ? (
-            <span className="mark-name">SirenVenue</span>
+            <span className="mark-name">
+              <img src="/brand/sv-monogram.svg" alt="" className="mark-sv" width={18} height={22} />
+              SirenVenue
+            </span>
           ) : (
             <Link className="mark-name" href={`/${locale}`}>
+              <img src="/brand/sv-monogram.svg" alt="" className="mark-sv" width={18} height={22} />
               SirenVenue
             </Link>
           )}

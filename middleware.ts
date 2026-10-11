@@ -55,18 +55,44 @@ function contentSecurityPolicy(nonce: string): string {
  * set on the *request* headers so Next.js can stamp its own bootstrap scripts,
  * and echoed on the response so the browser enforces it.
  */
+/** The admin host. Everything on it is served from the /admin route. */
+const ADMIN_HOST = "admin.sirenvenue.sk";
+
+function isAdminHost(request: NextRequest): boolean {
+  const host = (request.headers.get("host") ?? "").split(":")[0].toLowerCase();
+  return host === ADMIN_HOST;
+}
+
+/** Document response with a fresh nonce and CSP, optionally rewritten. */
+function withCsp(request: NextRequest, rewriteTo?: URL): NextResponse {
+  const nonce = generateNonce();
+  const csp = contentSecurityPolicy(nonce);
+
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-nonce", nonce);
+  requestHeaders.set("Content-Security-Policy", csp);
+
+  const response = rewriteTo
+    ? NextResponse.rewrite(rewriteTo, { request: { headers: requestHeaders } })
+    : NextResponse.next({ request: { headers: requestHeaders } });
+  response.headers.set("Content-Security-Policy", csp);
+  if (rewriteTo) response.headers.set("X-Robots-Tag", "noindex, nofollow");
+  return response;
+}
+
 export function middleware(request: NextRequest) {
+  // admin.sirenvenue.sk: every document path maps onto /admin. The public
+  // site (locales, work pages) is not reachable on that host.
+  if (isAdminHost(request)) {
+    const url = request.nextUrl.clone();
+    if (!url.pathname.startsWith("/admin")) {
+      url.pathname = `/admin${url.pathname === "/" ? "" : url.pathname}`;
+    }
+    return withCsp(request, url);
+  }
+
   if (request.nextUrl.pathname !== "/") {
-    const nonce = generateNonce();
-    const csp = contentSecurityPolicy(nonce);
-
-    const requestHeaders = new Headers(request.headers);
-    requestHeaders.set("x-nonce", nonce);
-    requestHeaders.set("Content-Security-Policy", csp);
-
-    const response = NextResponse.next({ request: { headers: requestHeaders } });
-    response.headers.set("Content-Security-Policy", csp);
-    return response;
+    return withCsp(request);
   }
 
   const cookie = request.cookies.get(LOCALE_COOKIE)?.value;

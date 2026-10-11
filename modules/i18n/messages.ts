@@ -8,7 +8,7 @@
  * or two, and the 404 copy. Product names never belong here. `BlinkLive`
  * and `DOT. Gallery` are brands: they are spelled the same in every locale and
  * are translated by no one. (SirenVenue.com tile removed per SOK-350.)
- * Home plaque uses home.* keys for SOK-348 vision sections.
+ * Home page uses home.* keys (site v3: lead, identity, the Now index).
  *
  * Where the strings live at runtime
  * ---------------------------------
@@ -64,12 +64,15 @@ export const messageKeys = [
   "nav.language",
   "notFound.lead",
   "notFound.note",
+  "home.lead",
   "home.identity",
+  "home.now",
   "home.client",
+  "home.own",
+  "home.dot",
+  "home.comma",
   "home.blink",
-  "home.operations",
-  "home.documents",
-  "home.live",
+  "home.next",
 ] as const;
 
 export type MessageKey = (typeof messageKeys)[number];
@@ -90,147 +93,156 @@ export type MessageCatalog = Record<
 export const catalog: MessageCatalog = {
   sk: {
     skip: "Prejsť na hlavný obsah",
-    colophon: "Softvér a systémy pre live, venue a galérie.",
+    colophon: "Riešenia na mieru pre ľudí a malé firmy.",
     "nav.language": "Jazyk",
     "notFound.lead": "Na tejto adrese nič nie je.",
     "notFound.note":
       "Odkaz je zastaraný alebo nikdy nebol náš. Každý produkt, ktorý vydávame, odkazuje späť na sirenvenue.sk. Toto je tá stránka.",
-    "home.identity":
-      "SirenVenue stavia softvér pre galérie a kultúrne priestory. Navrhujeme a dodávame systémy, na ktorých tieto miesta skutočne bežia. Bratislava. Slovenská spoločnosť. Remeslo na prvom mieste.",
-    "home.client":
-      "DOT. Gallery + COMMA modernizácia. Inventár, dokumenty, udalosti, predaj, automatizácia naprieč doménami. AI sekretárka na podanie a granty. Sklad je interná chrbtica, nie verejná produktová dlaždica.",
-    "home.blink": "Živá kamera pre priestory, ktoré potrebujú oči.",
-    "home.operations": "operácie",
-    "home.documents": "dokumenty",
-    "home.live": "live",
+    "home.lead": "Každá úloha je iná. Aj odpoveď.",
+    "home.identity": "Navrhujeme a staviame moderné riešenia na mieru. Pre jednotlivcov aj malé firmy. Z Bratislavy.",
+    "home.now": "Teraz",
+    "home.client": "Klient",
+    "home.own": "Vlastný projekt",
+    "home.dot": "Celá prevádzka, kúsok po kúsku.",
+    "home.comma": "Rovnaký základ, vlastná tvár.",
+    "home.blink": "Živá kamera pre miesta, ktoré potrebujú oči.",
+    "home.next": "Ďalší riadok môže byť čokoľvek.",
   },
   en: {
     skip: "Skip to main content",
-    colophon: "Software & systems for live, venue, and gallery.",
+    colophon: "Made-to-measure solutions for people and small businesses.",
     "nav.language": "Language",
     "notFound.lead": "Nothing at this address.",
     "notFound.note":
       "The link is out of date, or it was never ours. Every product we ship links back to sirenvenue.sk. This is that page.",
-    "home.identity":
-      "SirenVenue builds software for galleries and cultural venues. We design and ship the systems those places actually run on. Bratislava. Slovak company. Craft first.",
-    "home.client":
-      "DOT. Gallery + COMMA modernization. Inventory, documents, events, sales, automation across domains. AI secretary for filing and grants. Sklad is the internal backbone, not a public product tile.",
-    "home.blink": "Live camera for rooms that need eyes.",
-    "home.operations": "operations",
-    "home.documents": "documents",
-    "home.live": "live",
+    "home.lead": "Every problem is different. So is the answer.",
+    "home.identity": "We design and build modern, made-to-measure solutions. For individuals and small businesses. From Bratislava.",
+    "home.now": "Now",
+    "home.client": "Client",
+    "home.own": "Our own",
+    "home.dot": "The whole operation, one piece at a time.",
+    "home.comma": "Same foundation, its own face.",
+    "home.blink": "A live camera for places that need eyes.",
+    "home.next": "The next line could be anything.",
   },
   de: {
     skip: "Zum Hauptinhalt springen",
-    colophon: "Software & Systeme für Live, Venue und Galerie.",
+    colophon: "Maßgeschneiderte Lösungen für Menschen und kleine Unternehmen.",
     "nav.language": "Sprache",
     "notFound.lead": "Unter dieser Adresse gibt es nichts.",
     "notFound.note":
       "Der Link ist veraltet, oder er war nie unserer. Jedes Produkt, das wir ausliefern, verweist zurück auf sirenvenue.sk. Das hier ist diese Seite.",
-    "home.identity":
-      "SirenVenue baut Software für Galerien und Kulturorte. Wir entwerfen und liefern die Systeme, die diese Orte tatsächlich nutzen. Bratislava. Slowakisches Unternehmen. Handwerk zuerst.",
-    "home.client":
-      "DOT. Gallery + COMMA Modernisierung. Inventar, Dokumente, Veranstaltungen, Verkauf, Automatisierung über Domänen. KI Sekretärin für Ablage und Förderungen. Sklad ist das interne Rückgrat, keine öffentliche Produktkachel.",
-    "home.blink": "Live Kamera für Räume, die Augen brauchen.",
-    "home.operations": "operations",
-    "home.documents": "documents",
-    "home.live": "live",
+    "home.lead": "Jede Aufgabe ist anders. Die Antwort auch.",
+    "home.identity": "Wir entwerfen und bauen moderne Lösungen nach Maß. Für Einzelpersonen und kleine Unternehmen. Aus Bratislava.",
+    "home.now": "Jetzt",
+    "home.client": "Kunde",
+    "home.own": "Eigenes Projekt",
+    "home.dot": "Der ganze Betrieb, Stück für Stück.",
+    "home.comma": "Gleiches Fundament, eigenes Gesicht.",
+    "home.blink": "Eine Live-Kamera für Orte, die Augen brauchen.",
+    "home.next": "Die nächste Zeile kann alles sein.",
   },
   es: {
     skip: "Saltar al contenido principal",
-    colophon: "Software y sistemas para directo, recintos y galerías.",
+    colophon: "Soluciones a medida para personas y pequeñas empresas.",
     "nav.language": "Idioma",
     "notFound.lead": "En esta dirección no hay nada.",
     "notFound.note":
       "El enlace está desactualizado o nunca fue nuestro. Cada producto que publicamos enlaza de vuelta a sirenvenue.sk. Esta es esa página.",
-    "home.identity":
-      "SirenVenue construye software para galerías y espacios culturales. Diseñamos y entregamos los sistemas que estos lugares realmente utilizan. Bratislava. Empresa eslovaca. Artesanía primero.",
-    "home.client":
-      "DOT. Gallery + modernización COMMA. Inventario, documentos, eventos, ventas, automatización entre dominios. Secretaria de IA para archivos y subvenciones. Sklad es la columna interna, no una baldosa de producto público.",
-    "home.blink": "Cámara en vivo para salas que necesitan ojos.",
-    "home.operations": "operations",
-    "home.documents": "documents",
-    "home.live": "live",
+    "home.lead": "Cada problema es distinto. La respuesta también.",
+    "home.identity": "Diseñamos y construimos soluciones modernas a medida. Para particulares y pequeñas empresas. Desde Bratislava.",
+    "home.now": "Ahora",
+    "home.client": "Cliente",
+    "home.own": "Proyecto propio",
+    "home.dot": "Toda la operación, pieza a pieza.",
+    "home.comma": "La misma base, su propia cara.",
+    "home.blink": "Una cámara en directo para lugares que necesitan ojos.",
+    "home.next": "La próxima línea puede ser cualquier cosa.",
   },
   "es-ve": {
     skip: "Saltar al contenido principal",
-    colophon: "Software y sistemas para vivo, recintos y galerías.",
+    colophon: "Soluciones a la medida para personas y pequeños negocios.",
     "nav.language": "Idioma",
     "notFound.lead": "No hay nada en esta dirección.",
     "notFound.note":
       "El enlace está vencido o nunca fue nuestro. Cada producto que lanzamos enlaza de vuelta a sirenvenue.sk. Esta es esa página.",
-    "home.identity":
-      "SirenVenue construye software para galerías y espacios culturales. Diseñamos y entregamos los sistemas que estos lugares realmente utilizan. Bratislava. Empresa eslovaca. Artesanía primero.",
-    "home.client":
-      "DOT. Gallery + modernización COMMA. Inventario, documentos, eventos, ventas, automatización entre dominios. Secretaria de IA para archivos y subvenciones. Sklad es la columna interna, no una baldosa de producto público.",
-    "home.blink": "Cámara en vivo para salas que necesitan ojos.",
-    "home.operations": "operations",
-    "home.documents": "documents",
-    "home.live": "live",
+    "home.lead": "Cada problema es distinto. La respuesta también.",
+    "home.identity": "Diseñamos y construimos soluciones modernas a la medida. Para personas y pequeños negocios. Desde Bratislava.",
+    "home.now": "Ahora",
+    "home.client": "Cliente",
+    "home.own": "Proyecto propio",
+    "home.dot": "Toda la operación, pieza por pieza.",
+    "home.comma": "La misma base, su propia cara.",
+    "home.blink": "Una cámara en vivo para lugares que necesitan ojos.",
+    "home.next": "La próxima línea puede ser cualquier cosa.",
   },
   hu: {
     skip: "Ugrás a fő tartalomra",
-    colophon: "Szoftver és rendszerek élő, helyszíni és galéria használatra.",
+    colophon: "Személyre szabott megoldások embereknek és kisvállalkozásoknak.",
     "nav.language": "Nyelv",
     "notFound.lead": "Ezen a címen nincs semmi.",
     "notFound.note":
       "A link elavult, vagy soha nem is a miénk volt. Minden termék, amit kiadunk, visszamutat a sirenvenue.sk-ra. Ez az az oldal.",
-    "home.identity":
-      "SirenVenue szoftvert épít galériák és kulturális helyszínek számára. Megtervezzük és leszállítjuk azokat a rendszereket, amelyeket ezek a helyek valóban használnak. Bratislava. Szlovák cég. Kézművesség először.",
-    "home.client":
-      "DOT. Gallery + COMMA modernizáció. Leltár, dokumentumok, események, értékesítés, automatizálás tartományok között. AI titkár irattárhoz és támogatásokhoz. Sklad a belső gerinc, nem nyilvános termékcsempe.",
-    "home.blink": "Élő kamera olyan helyiségekhez, amelyeknek szemek kellenek.",
-    "home.operations": "operations",
-    "home.documents": "documents",
-    "home.live": "live",
+    "home.lead": "Minden feladat más. A válasz is.",
+    "home.identity": "Modern, személyre szabott megoldásokat tervezünk és építünk. Magánszemélyeknek és kisvállalkozásoknak. Pozsonyból.",
+    "home.now": "Most",
+    "home.client": "Ügyfél",
+    "home.own": "Saját projekt",
+    "home.dot": "Az egész működés, darabról darabra.",
+    "home.comma": "Ugyanaz az alap, saját arc.",
+    "home.blink": "Élő kamera olyan helyekre, ahol szem kell.",
+    "home.next": "A következő sor bármi lehet.",
   },
   cs: {
     skip: "Přeskočit na hlavní obsah",
-    colophon: "Software a systémy pro live, venue a galerie.",
+    colophon: "Řešení na míru pro lidi a malé firmy.",
     "nav.language": "Jazyk",
     "notFound.lead": "Na této adrese nic není.",
     "notFound.note":
       "Odkaz je zastaralý, nebo nikdy nebyl náš. Každý produkt, který vydáváme, odkazuje zpět na sirenvenue.sk. Tohle je ta stránka.",
-    "home.identity":
-      "SirenVenue staví software pro galerie a kulturní prostory. Navrhujeme a dodáváme systémy, na kterých tato místa skutečně běží. Bratislava. Slovenská společnost. Řemeslo na prvním místě.",
-    "home.client":
-      "DOT. Gallery + COMMA modernizace. Inventář, dokumenty, události, prodej, automatizace napříč doménami. AI sekretářka pro podání a granty. Sklad je interní páteř, ne veřejná produktová dlaždice.",
-    "home.blink": "Živá kamera pro místnosti, které potřebují oči.",
-    "home.operations": "operations",
-    "home.documents": "documents",
-    "home.live": "live",
+    "home.lead": "Každý úkol je jiný. I odpověď.",
+    "home.identity": "Navrhujeme a stavíme moderní řešení na míru. Pro jednotlivce i malé firmy. Z Bratislavy.",
+    "home.now": "Teď",
+    "home.client": "Klient",
+    "home.own": "Vlastní projekt",
+    "home.dot": "Celý provoz, kousek po kousku.",
+    "home.comma": "Stejný základ, vlastní tvář.",
+    "home.blink": "Živá kamera pro místa, která potřebují oči.",
+    "home.next": "Další řádek může být cokoli.",
   },
   uk: {
     skip: "Перейти до основного вмісту",
-    colophon: "Софтвер і системи для сцени, майданчиків і галерей.",
+    colophon: "Рішення на замовлення для людей і малого бізнесу.",
     "nav.language": "Мова",
     "notFound.lead": "За цією адресою нічого немає.",
     "notFound.note":
       "Посилання застаріло, або ніколи не було нашим. Кожен продукт, який ми випускаємо, веде назад на sirenvenue.sk. Це та сторінка.",
-    "home.identity":
-      "SirenVenue створює програмне забезпечення для галерей і культурних просторів. Ми проєктуємо та постачаємо системи, на яких ці місця справді працюють. Bratislava. Словацька компанія. Ремесло насамперед.",
-    "home.client":
-      "DOT. Gallery + COMMA модернізація. Інвентар, документи, події, продажі, автоматизація між доменами. AI секретар для подання та грантів. Sklad є внутрішнім хребтом, не публічним продуктом.",
-    "home.blink": "Жива камера для приміщень, яким потрібні очі.",
-    "home.operations": "operations",
-    "home.documents": "documents",
-    "home.live": "live",
+    "home.lead": "Кожне завдання інше. І відповідь теж.",
+    "home.identity": "Ми проєктуємо й будуємо сучасні рішення на замовлення. Для людей і малого бізнесу. З Братислави.",
+    "home.now": "Зараз",
+    "home.client": "Клієнт",
+    "home.own": "Власний проєкт",
+    "home.dot": "Уся робота, крок за кроком.",
+    "home.comma": "Та сама основа, власне обличчя.",
+    "home.blink": "Жива камера для місць, яким потрібні очі.",
+    "home.next": "Наступний рядок може бути будь-чим.",
   },
   ru: {
     skip: "Перейти к основному содержанию",
-    colophon: "Софт и системы для сцены, площадок и галерей.",
+    colophon: "Решения на заказ для людей и малого бизнеса.",
     "nav.language": "Язык",
     "notFound.lead": "По этому адресу ничего нет.",
     "notFound.note":
       "Ссылка устарела или никогда не была нашей. Каждый продукт, который мы выпускаем, ведёт обратно на sirenvenue.sk. Это та самая страница.",
-    "home.identity":
-      "SirenVenue создаёт ПО для галерей и культурных пространств. Мы проектируем и поставляем системы, на которых эти места реально работают. Bratislava. Словацкая компания. Ремесло прежде всего.",
-    "home.client":
-      "DOT. Gallery + COMMA модернизация. Инвентарь, документы, события, продажи, автоматизация между доменами. AI секретарь для подачи и грантов. Sklad это внутренний хребет, не публичный продукт.",
-    "home.blink": "Живая камера для помещений, которым нужны глаза.",
-    "home.operations": "operations",
-    "home.documents": "documents",
-    "home.live": "live",
+    "home.lead": "Каждая задача другая. И ответ тоже.",
+    "home.identity": "Мы проектируем и создаём современные решения на заказ. Для частных лиц и малого бизнеса. Из Братиславы.",
+    "home.now": "Сейчас",
+    "home.client": "Клиент",
+    "home.own": "Собственный проект",
+    "home.dot": "Вся работа, шаг за шагом.",
+    "home.comma": "Та же основа, своё лицо.",
+    "home.blink": "Живая камера для мест, которым нужны глаза.",
+    "home.next": "Следующая строка может быть чем угодно.",
   },
 };
 
