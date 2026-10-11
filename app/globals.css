@@ -678,3 +678,81 @@ main {
   color: var(--fg);
   font-weight: 600;
 }
+
+/* ---- admin (admin.sirenvenue.sk) ----
+   One column, one field, one button. Same tokens as the site. */
+
+.admin {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: var(--pad);
+  font-family: var(--font-sans, var(--font-fallback));
+}
+
+.admin-main {
+  width: min(100%, 20rem);
+  display: grid;
+  gap: 1.5rem;
+}
+
+.admin-mark {
+  width: 2.25rem;
+  height: auto;
+}
+
+.admin-title {
+  margin: 0;
+  font-family: var(--font-serif), var(--font-serif-fallback);
+  font-weight: 400;
+  font-size: var(--fs-entry);
+  line-height: 1;
+}
+
+.admin-form {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.admin-input {
+  min-height: 2.75rem;
+  padding: 0 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--fg);
+  font: inherit;
+}
+
+.admin-input:focus-visible {
+  border-color: var(--dim);
+}
+
+.admin-button {
+  min-height: 2.75rem;
+  margin-top: 0.4rem;
+  border: 1px solid var(--fg);
+  border-radius: 4px;
+  background: var(--fg);
+  color: var(--bg);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--motion-fast), color var(--motion-fast);
+}
+
+.admin-button:hover {
+  background: transparent;
+  color: var(--fg);
+}
+
+.admin-button:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.admin-status {
+  margin: 0;
+  font-size: var(--fs-note);
+  color: var(--muted);
+}
