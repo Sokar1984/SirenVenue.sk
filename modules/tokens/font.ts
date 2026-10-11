@@ -1,16 +1,24 @@
-import { Geist } from "next/font/google";
+import { Geist, Instrument_Serif } from "next/font/google";
 
 /**
- * The site's one typeface.
+ * The site's two typefaces, both self-hosted through `next/font` (fetched and
+ * fingerprinted at build time, no runtime request to Google, metrics-matched
+ * fallback, no layout shift). This is the only place families are chosen.
  *
- * Declared through `next/font` so the woff2 files are pulled and fingerprinted
- * at build time, served from our own origin, and preloaded with a metrics-matched
- * fallback — no runtime request to Google, no layout shift. This is the only
- * place the family is chosen; the variable `--font-sans` is consumed by
- * app/globals.css and mirrored by `tokens.font.family`.
+ * Geist carries everything functional: chrome, labels, body.
+ * Instrument Serif carries the voice: the lead line and the names in the index.
+ * Two families, two jobs, never mixed inside one element.
  */
 export const geist = Geist({
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext", "cyrillic"],
   variable: "--font-sans",
+  display: "swap",
+});
+
+export const serif = Instrument_Serif({
+  weight: "400",
+  style: ["normal", "italic"],
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-serif",
   display: "swap",
 });
