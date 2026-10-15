@@ -8,3 +8,4 @@
  * root redirect honours and opens the same path in that locale.
  */
 export { LangSwitch } from "./lang-switch";
+export { LangLinks } from "./lang-links";

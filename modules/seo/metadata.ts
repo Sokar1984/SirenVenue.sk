@@ -4,7 +4,7 @@ import {
   enabledLocales,
   type Locale,
 } from "@/modules/i18n";
-import { LEGAL_NAME, localeUrl, SITE_URL } from "./site";
+import { LEGAL_NAME, localeUrl, SITE_URL, type PagePath } from "./site";
 
 type LocaleSeo = {
   /** `<title>` / `og:title`. */
@@ -74,40 +74,55 @@ const SEO: Record<Locale, LocaleSeo> = {
   },
 };
 
-/** All locale URLs plus the `x-default` fallback, keyed for `hreflang`. */
-export function languageAlternates(): Record<string, string> {
+/** Every locale's URL for one page, plus `x-default` (Slovak). Includes self. */
+export function languageAlternates(path: PagePath = ""): Record<string, string> {
   const languages: Record<string, string> = {};
   for (const locale of enabledLocales) {
-    languages[SEO[locale].hreflang] = localeUrl(locale);
+    languages[SEO[locale].hreflang] = localeUrl(locale, path);
   }
-  languages["x-default"] = localeUrl(defaultLocale);
+  languages["x-default"] = localeUrl(defaultLocale, path);
   return languages;
 }
 
+/** Optional per-page overrides. The index uses the locale's own SEO entry. */
+export type PageSeo = {
+  path: PagePath;
+  title: string | null;
+  description: string | null;
+};
+
 /**
  * Per-locale document metadata: localized title/description, the Open Graph
- * locale, a self-referencing canonical, and `hreflang` alternates for every
- * enabled locale plus `x-default`.
+ * locale, a self-referencing canonical for this exact page, and `hreflang`
+ * alternates for the same page in every enabled locale plus `x-default`.
+ * The og:image comes from app/[locale]/opengraph-image.tsx.
  */
-export function pageMetadata(locale: Locale): Metadata {
+export function pageMetadata(locale: Locale, page?: PageSeo): Metadata {
   const copy = SEO[locale];
-  const url = localeUrl(locale);
+  const path = page?.path ?? "";
+  const url = localeUrl(locale, path);
+  const title = page?.title ? `${page.title} · SirenVenue` : copy.title;
+  const description = page?.description ?? copy.description;
 
   return {
     metadataBase: new URL(SITE_URL),
-    title: copy.title,
-    description: copy.description,
+    title,
+    description,
     alternates: {
       canonical: url,
-      languages: languageAlternates(),
+      languages: languageAlternates(path),
     },
     openGraph: {
       type: "website",
       locale: copy.ogLocale,
+      alternateLocale: enabledLocales
+        .filter((other) => other !== locale)
+        .map((other) => SEO[other].ogLocale),
       url,
       siteName: "SirenVenue",
-      title: copy.title,
-      description: copy.description,
+      title,
+      description,
     },
+    twitter: { card: "summary_large_image", title, description },
   };
 }

@@ -5,5 +5,5 @@
  * Nothing outside this module may import its internals.
  */
 export { organizationJsonLd, type OrganizationJsonLd } from "./jsonld";
-export { pageMetadata, languageAlternates } from "./metadata";
-export { SITE_URL, localeUrl } from "./site";
+export { pageMetadata, languageAlternates, type PageSeo } from "./metadata";
+export { SITE_URL, CONTENT_UPDATED, PAGES, localeUrl, type PagePath } from "./site";

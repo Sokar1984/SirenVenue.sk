@@ -12,10 +12,11 @@ type Entry = {
 };
 
 /**
- * Site v3 home. Three moves, nothing else:
+ * Site v3 home. Four moves, nothing else:
  *   1. the lead (serif, the page's one loud thing) and a quiet identity line,
  *   2. "Now": a typeset index of what is on the bench today,
- *   3. an open, unnumbered last line that implies the list has no edge.
+ *   3. an open, unnumbered last line that implies the list has no edge,
+ *   4. "How we work": a few paragraphs of plain prose and what that can mean.
  * No cards, no frames, no call to action. The work and the open line say it.
  */
 export default async function Home({
@@ -36,6 +37,14 @@ export default async function Home({
   const client = message(locale, "home.client");
   const own = message(locale, "home.own");
   const next = message(locale, "home.next");
+  const how = message(locale, "home.how");
+  const studio = (["home.p1", "home.p2", "home.p3", "home.p4"] as const)
+    .map((key) => message(locale, key))
+    .filter((text): text is string => Boolean(text));
+  const servicesLabel = message(locale, "home.services");
+  const services = (["home.s1", "home.s2", "home.s3", "home.s4"] as const)
+    .map((key) => message(locale, key))
+    .filter((text): text is string => Boolean(text));
 
   const entries: Entry[] = [
     {
@@ -136,6 +145,32 @@ export default async function Home({
               </li>
             ) : null}
           </ol>
+        </section>
+
+        {/* How we work: plain reading text in the same two-column rhythm as
+            the ledger. Label left, measure-width prose right, then the short
+            list of what that can mean, set as a quiet run of words. */}
+        <section className="now how" aria-labelledby="how-label">
+          {how ? (
+            <h2 id="how-label" className="label now-label">
+              {how}
+            </h2>
+          ) : null}
+          <div className="how-body">
+            {studio.map((text) => (
+              <p key={text}>{text}</p>
+            ))}
+            {services.length > 0 ? (
+              <div className="how-services">
+                {servicesLabel ? <h3 className="label">{servicesLabel}</h3> : null}
+                <ul>
+                  {services.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+          </div>
         </section>
       </main>
     </Chrome>

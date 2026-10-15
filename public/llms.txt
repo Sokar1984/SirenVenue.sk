@@ -1,0 +1,25 @@
+# SirenVenue
+
+> SirenVenue s. r. o. is a small studio in Bratislava, Slovakia. It designs and builds modern, made-to-measure solutions for individuals and small businesses: websites and web apps, internal tools and automation, live video and camera systems, and hosting and care after launch.
+
+The site is published in Slovak (primary) and eight other languages. Each page exists under /{locale}, for example /sk and /en.
+
+## Pages
+
+- [Home (Slovak)](https://sirenvenue.sk/sk): what we do and what is on the bench now
+- [Home (English)](https://sirenvenue.sk/en)
+- [About](https://sirenvenue.sk/en/about): the company and its verified legal facts
+- [Privacy](https://sirenvenue.sk/en/privacy): how personal data is handled
+
+## Work
+
+- DOT. Gallery (client): https://dotgallery.sk
+- COMMA gallery (client)
+- BlinkLive (own project, live camera): https://blinklive.app
+
+## Company
+
+- Legal name: SirenVenue s. r. o.
+- IČO: 56302941
+- Registered seat: Jakubovo námestie 2556/3, 811 09 Bratislava, Slovakia
+- Email: info@sirenvenue.sk
