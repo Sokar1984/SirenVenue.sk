@@ -794,18 +794,11 @@ main {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 0.4rem 2rem;
   font-family: var(--font-serif), var(--font-serif-fallback);
   font-size: var(--fs-identity);
-}
-
-/* Items run on as one line of words, joined by a slash, not bullets. */
-.how-services li + li::before {
-  content: "/";
-  margin: 0 0.6rem;
-  color: var(--dim);
 }
 
 /* ---- inner pages (about, privacy) ---- */
