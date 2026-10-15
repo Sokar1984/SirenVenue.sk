@@ -21,9 +21,9 @@ export const tokens = {
   font: {
     family: "var(--font-sans)",
     serif: "var(--font-serif)",
-    lead: "clamp(2.75rem, 7.2vw, 6.25rem)",
+    lead: "clamp(2.5rem, 5vw, 4.5rem)",
     identity: "clamp(1.05rem, 1.45vw, 1.25rem)",
-    entry: "clamp(1.9rem, 3.6vw, 3rem)",
+    entry: "clamp(1.5rem, 2.3vw, 2.1rem)",
     body: "16px",
     markName: "1rem",
     markLegal: "0.78rem",
@@ -40,8 +40,8 @@ export const tokens = {
   space: {
     pad: "clamp(1.25rem, 5vw, 3.5rem)",
     maxw: "68rem",
-    shellGap: "clamp(1.5rem, 3.5vw, 3rem)",
-    sectionGap: "clamp(4.5rem, 12vw, 9rem)",
+    shellGap: "clamp(1.25rem, 2.5vw, 2rem)",
+    sectionGap: "clamp(2.25rem, 5vw, 3.5rem)",
     measure: "34ch",
   },
   motion: {
