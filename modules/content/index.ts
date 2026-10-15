@@ -94,7 +94,9 @@ function cachedRead<Args extends readonly unknown[], Result>(
   tags: ContentTag[],
   read: (...args: Args) => Promise<Result>,
 ): (...args: Args) => Promise<Result> {
-  const cached = unstable_cache(read, keyParts, { tags });
+  // Tags give instant invalidation on writes. The hour is a backstop so a missed
+  // revalidate can never pin stale copy for longer than that.
+  const cached = unstable_cache(read, keyParts, { tags, revalidate: 3600 });
   return async (...args: Args): Promise<Result> => {
     try {
       return await cached(...args);
