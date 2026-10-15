@@ -33,8 +33,8 @@ const SEO: Record<Locale, LocaleSeo> = {
   de: {
     title: "SirenVenue - Lösungen nach Maß",
     description: `${LEGAL_NAME} entwirft und baut moderne Lösungen nach Maß für Einzelpersonen und kleine Unternehmen. Bratislava, Slowakei.`,
-    ogLocale: "de_DE",
-    hreflang: "de",
+    ogLocale: "de_AT",
+    hreflang: "de-AT",
   },
   es: {
     title: "SirenVenue - soluciones a medida",

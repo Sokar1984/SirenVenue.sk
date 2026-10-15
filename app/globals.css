@@ -161,12 +161,13 @@ a:not(.row-link):not(.ledger-entry):not(.mark-name):hover {
 
 .home {
   gap: var(--section-gap);
-  padding-block: clamp(2.5rem, 9vw, 7rem) clamp(1rem, 4vw, 3rem);
+  padding-block: clamp(0.75rem, 3vw, 2.5rem) clamp(0.5rem, 2vw, 1.5rem);
 }
 
 .opening {
   display: grid;
-  gap: clamp(1.5rem, 3vw, 2.5rem);
+  gap: clamp(1rem, 2vw, 1.5rem);
+  align-content: start;
 }
 
 .lead {
@@ -238,7 +239,7 @@ a:not(.row-link):not(.ledger-entry):not(.mark-name):hover {
   column-gap: clamp(0.6rem, 1.5vw, 1.25rem);
   row-gap: 0.45rem;
   align-items: baseline;
-  padding: clamp(1.1rem, 2.4vw, 1.75rem) 0;
+  padding: clamp(0.7rem, 1.4vw, 1rem) 0;
   text-decoration: none;
 }
 
@@ -918,5 +919,65 @@ main {
 @media (max-width: 720px) {
   .page {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---- home on wide screens: one screen, no empty viewports ----
+   The opening and the ledger sit side by side; "How we work" runs underneath
+   in two text columns. Nothing gets a min-height. */
+@media (min-width: 1024px) {
+  .home {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: clamp(2.5rem, 5vw, 5rem);
+    row-gap: var(--section-gap);
+    align-items: start;
+    align-content: start;
+  }
+
+  .home > .now:not(.how) {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.6rem;
+  }
+
+  .home > .now:not(.how) .now-label {
+    padding-top: 0;
+  }
+
+  .lead-line-2,
+  .identity {
+    padding-left: clamp(1rem, 4vw, 3.5rem);
+  }
+
+  .identity {
+    margin-left: 0;
+  }
+
+  .how {
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(0, 9rem) minmax(0, 1fr);
+  }
+
+  .how-body {
+    max-width: none;
+    display: block;
+    column-count: 2;
+    column-gap: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .how-body p {
+    font-size: var(--fs-note);
+    margin-bottom: 0.9rem;
+    break-inside: avoid;
+  }
+
+  .how-services {
+    break-inside: avoid;
+    margin-top: 0;
+  }
+
+  .how-services ul {
+    grid-template-columns: minmax(0, 1fr);
+    font-size: var(--fs-note);
   }
 }

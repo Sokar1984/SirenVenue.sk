@@ -44,15 +44,15 @@
   --fs-row-arrow: 0.8rem;
   --fs-foot: 0.82rem;
   /* Display tier: the lead is the page. Serif, large, set tight. */
-  --fs-lead: clamp(2.75rem, 7.2vw, 6.25rem);
+  --fs-lead: clamp(2.5rem, 5vw, 4.5rem);
   --fs-identity: clamp(1.05rem, 1.45vw, 1.25rem);
-  --fs-entry: clamp(1.9rem, 3.6vw, 3rem);
+  --fs-entry: clamp(1.5rem, 2.3vw, 2.1rem);
 
   /* Spacing */
   --pad: clamp(1.25rem, 5vw, 3.5rem);
   --maxw: 68rem;
-  --shell-gap: clamp(1.5rem, 3.5vw, 3rem);
-  --section-gap: clamp(4.5rem, 12vw, 9rem);
+  --shell-gap: clamp(1.25rem, 2.5vw, 2rem);
+  --section-gap: clamp(2.25rem, 5vw, 3.5rem);
   --measure: 34ch;
 
   /* Motion */
