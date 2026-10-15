@@ -4,7 +4,7 @@ import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { company, contact } from "@/content/legal";
 import { enabledLocales, isLocale, message, type Locale } from "@/modules/i18n";
-import { LangSwitch } from "@/modules/lang-switch";
+import { LangLinks, LangSwitch } from "@/modules/lang-switch";
 import { organizationJsonLd, pageMetadata } from "@/modules/seo";
 import { geist, serif } from "@/modules/tokens";
 import "../globals.css";
@@ -56,6 +56,12 @@ type ChromeProps = {
 export function Chrome({ locale, path, home = false, children }: ChromeProps) {
   const skip = message(locale, "skip");
   const navLanguage = message(locale, "nav.language");
+  const navPages = message(locale, "nav.pages");
+  const pages: Array<[string, string | null]> = [
+    ["", message(locale, "nav.home")],
+    ["/about", message(locale, "nav.about")],
+    ["/privacy", message(locale, "nav.privacy")],
+  ];
 
   return (
     <div className={`shell ${geist.variable} ${serif.variable}`}>
@@ -69,12 +75,12 @@ export function Chrome({ locale, path, home = false, children }: ChromeProps) {
         <div className="mark">
           {home ? (
             <span className="mark-name">
-              <img src="/brand/sv-monogram.svg" alt="" className="mark-sv" width={18} height={22} />
+              <img src="/brand/sv-monogram.svg" alt="" className="mark-sv" width={18} height={22} fetchPriority="high" decoding="async" />
               SirenVenue
             </span>
           ) : (
             <Link className="mark-name" href={`/${locale}`}>
-              <img src="/brand/sv-monogram.svg" alt="" className="mark-sv" width={18} height={22} />
+              <img src="/brand/sv-monogram.svg" alt="" className="mark-sv" width={18} height={22} fetchPriority="high" decoding="async" />
               SirenVenue
             </Link>
           )}
@@ -87,6 +93,20 @@ export function Chrome({ locale, path, home = false, children }: ChromeProps) {
       {children}
 
       <footer className="foot">
+        <nav className="strip foot-nav" aria-label={navPages ?? undefined}>
+          {pages.map(([href, label]) =>
+            label ? (
+              <Link
+                key={href}
+                href={`/${locale}${href}`}
+                aria-current={href === path ? "page" : undefined}
+              >
+                {label}
+              </Link>
+            ) : null,
+          )}
+        </nav>
+        <LangLinks locale={locale} path={path} label={navLanguage ?? undefined} />
         <div className="strip">
           <a href={`mailto:${contact.email}`}>{contact.email}</a>
           <span>{contact.city}</span>
@@ -122,6 +142,8 @@ export default async function LocaleLayout({
   return (
     <html lang={locale}>
       <body>
+        <link rel="llms" href="/llms.txt" />
+        <link rel="preload" href="/brand/sv-monogram.svg" as="image" fetchPriority="high" />
         <script
           type="application/ld+json"
           nonce={nonce}
