@@ -1,6 +1,8 @@
 import type { Locale } from "@/modules/i18n";
 
-/** BCP 47 tag for a locale code. Only Venezuelan Spanish needs a region. */
+/** BCP 47 tag for a locale code. German is served as Austrian German. */
 export function localeHreflang(locale: Locale): string {
-  return locale === "es-ve" ? "es-VE" : locale;
+  if (locale === "es-ve") return "es-VE";
+  if (locale === "de") return "de-AT";
+  return locale;
 }

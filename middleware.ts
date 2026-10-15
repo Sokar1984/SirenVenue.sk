@@ -91,6 +91,14 @@ export function middleware(request: NextRequest) {
     return withCsp(request, url);
   }
 
+  // Venezuelan Spanish is no longer served. Keep old links alive.
+  const path = request.nextUrl.pathname;
+  if (path === "/es-ve" || path.startsWith("/es-ve/")) {
+    const url = request.nextUrl.clone();
+    url.pathname = `/es${path.slice("/es-ve".length)}`;
+    return NextResponse.redirect(url, 308);
+  }
+
   if (request.nextUrl.pathname !== "/") {
     return withCsp(request);
   }

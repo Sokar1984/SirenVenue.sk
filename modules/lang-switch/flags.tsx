@@ -92,9 +92,9 @@ export function Flag({ code }: { code: Locale }) {
     case "de":
       return (
         <svg viewBox="0 0 24 16" aria-hidden="true" className={FLAG_CLASS}>
-          <rect width="24" height="5.333" fill="#000000" />
-          <rect y="5.333" width="24" height="5.334" fill="#DD0000" />
-          <rect y="10.667" width="24" height="5.333" fill="#FFCE00" />
+          {/* Austria: red, white, red (the `de` locale is presented as AT). */}
+          <rect width="24" height="16" fill="#C8102E" />
+          <rect y="5.333" width="24" height="5.334" fill="#FFFFFF" />
         </svg>
       );
     case "es":

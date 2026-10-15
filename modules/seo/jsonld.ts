@@ -104,7 +104,7 @@ export function organizationJsonLd(): OrganizationJsonLd {
         "@id": `${SITE_URL}/#website`,
         url: SITE_URL,
         name: "SirenVenue",
-        inLanguage: ["sk", "en", "de", "es", "es-VE", "hu", "cs", "uk", "ru"],
+        inLanguage: ["sk", "en", "de-AT", "es", "hu", "cs", "uk", "ru"],
         publisher: { "@id": orgId },
       },
     ],

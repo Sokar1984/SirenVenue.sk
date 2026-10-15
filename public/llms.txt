@@ -2,7 +2,7 @@
 
 > SirenVenue s. r. o. is a small studio in Bratislava, Slovakia. It designs and builds modern, made-to-measure solutions for individuals and small businesses: websites and web apps, internal tools and automation, live video and camera systems, and hosting and care after launch.
 
-The site is published in Slovak (primary) and eight other languages. Each page exists under /{locale}, for example /sk and /en.
+The site is published in Slovak (primary) and seven other languages. Each page exists under /{locale}, for example /sk and /en.
 
 ## Pages
 

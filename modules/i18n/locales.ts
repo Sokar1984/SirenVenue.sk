@@ -4,9 +4,13 @@
  * Slovak is the primary locale and is served from the site root (`/sk`), while
  * `/` redirects to it. The order below is the canonical display order.
  *
- * NOTE: `es-ve` is Venezuelan Spanish and is deliberately its own locale. It
- * must never be flattened into `es`: the two carry different copy and serve
- * different markets, and collapsing them would silently show the wrong one.
+ * NOTE: `es-ve` (Venezuelan Spanish) stays in the catalogue and keeps its own
+ * copy, but it is not served (removed from the language bar, Oct 2026).
+ * `/es-ve/...` 308s to `/es/...` in middleware so old links keep working.
+ * Re-enabling it is one line in `enabledLocales`.
+ *
+ * `de` is presented as Austria: AT plate and flag, hreflang `de-AT`. The route
+ * stays `/de`.
  */
 export const locales = [
   "sk",
@@ -25,10 +29,12 @@ export type Locale = (typeof locales)[number];
 /** Fallback when nothing else matches. */
 export const defaultLocale: Locale = "sk";
 
-/** Locales this deployment is allowed to serve. */
-export const enabledLocales: readonly Locale[] = locales;
+/** Locales this deployment serves and lists in the language bar. */
+export const enabledLocales: readonly Locale[] = locales.filter(
+  (locale) => locale !== "es-ve",
+);
 
-const enabled: ReadonlySet<string> = new Set(locales);
+const enabled: ReadonlySet<string> = new Set(enabledLocales);
 
 /** Type guard: narrows an arbitrary path segment to a known, enabled locale. */
 export function isLocale(value: string): value is Locale {
@@ -36,11 +42,13 @@ export function isLocale(value: string): value is Locale {
 }
 
 /**
- * Header label for a locale. Mirrors the plate treatment the site already used
- * (two-letter plates; Venezuelan Spanish is "VE", not "ES").
+ * Header label for a locale. Two-letter plates. German is shown as Austria
+ * ("AT"). Venezuelan Spanish, if ever re-enabled, is "VE".
  */
 export function localeLabel(locale: Locale): string {
-  return locale === "es-ve" ? "VE" : locale.toUpperCase();
+  if (locale === "es-ve") return "VE";
+  if (locale === "de") return "AT";
+  return locale.toUpperCase();
 }
 
 /**
@@ -71,11 +79,11 @@ export function matchLocale(
   for (const { tag } of ranges) {
     if (tag === "*") continue;
 
-    const exact = locales.find((locale) => locale === tag);
+    const exact = enabledLocales.find((locale) => locale === tag);
     if (exact) return exact;
 
     const base = tag.split("-")[0];
-    const baseMatch = locales.find((locale) => locale === base);
+    const baseMatch = enabledLocales.find((locale) => locale === base);
     if (baseMatch) return baseMatch;
   }
 
