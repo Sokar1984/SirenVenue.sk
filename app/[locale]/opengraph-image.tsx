@@ -1,22 +1,18 @@
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { isLocale, message } from "@/modules/i18n";
 import { tokens } from "@/modules/tokens";
+import { SV_MARK_PATH, SV_MARK_VIEWBOX } from "./sv-mark";
 
 /** Social card, 1200x630. Monogram, name, the locale's own tagline. Nothing else. */
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 export const alt = "SirenVenue";
 
-// The monogram's single path, lifted from the brand file so the card and the
-// site draw the same mark.
-const monogram = readFileSync(
-  join(process.cwd(), "public/brand/sv-monogram.svg"),
-  "utf8",
-);
-const pathD = monogram.match(/ d="([^"]+)"/)?.[1] ?? "";
-const viewBox = monogram.match(/viewBox="([^"]+)"/)?.[1] ?? "0 0 289 355";
+// The mark comes from a module, never from public/ at runtime: public files
+// are not in the function bundle on Vercel, and reading one there crashed
+// metadata resolution for every page.
+const pathD = SV_MARK_PATH;
+const viewBox = SV_MARK_VIEWBOX;
 
 export default async function OpengraphImage({
   params,
