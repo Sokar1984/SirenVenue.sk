@@ -15,7 +15,7 @@ The site is published in Slovak (primary) and seven other languages. Each page e
 
 - DOT. Gallery (client): https://dotgallery.sk
 - COMMA gallery (client)
-- BlinkLive (own project, live camera): https://blinklive.app
+- BlinkLive (one of our own projects, live camera): https://blinklive.app
 
 ## Company
 
