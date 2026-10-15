@@ -1,8 +1,7 @@
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
 import { notFound } from "next/navigation";
 import { getWork, getWorks } from "@/modules/content";
 import { enabledLocales, isLocale } from "@/modules/i18n";
+import { DOT_MARK_SVG } from "./dot-mark";
 import { Chrome } from "../../layout";
 
 /**
@@ -46,12 +45,7 @@ export default async function Work({
   // The mark is decorative: the colophon directly beneath it already names the
   // work, so announcing it would repeat "DOT." to assistive tech.
   const hasMark = work.slug === "dot-gallery";
-  const mark = hasMark
-    ? readFileSync(
-        join(process.cwd(), "public/brand/dot-gallery.svg"),
-        "utf8",
-      )
-    : null;
+  const mark = hasMark ? DOT_MARK_SVG : null;
 
   // `work.name` is a product brand, identical in every locale, so it is the
   // colophon and the section's accessible name, not a catalog entry.
