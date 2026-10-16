@@ -15,7 +15,7 @@
      so it is the one that must not drift down. */
   --bg: #0e0d0b;
   --fg: #e8e4dc;
-  --muted: #a8a299;
+  --muted: #bfb9ae;
   --dim: #8a847b;
   --line: #2a2723;
   --lift: rgba(232, 228, 220, 0.04);
@@ -28,24 +28,29 @@
   --font-fallback: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
     Helvetica, Arial, sans-serif;
 
-  /* Type scale. Two display steps (colophon > row name) and a small, tracked
-     label tier. The index must command the page, so the display contrast is
-     wide on purpose. */
-  --fs-body: 16px;
-  --fs-mark-name: 1rem;
-  --fs-mark-legal: 0.78rem;
-  --fs-locales: 0.72rem;
-  --fs-colophon: clamp(1.75rem, 3.2vw, 2.5rem);
-  --fs-note: 0.9rem;
-  --fs-label: 0.7rem;
-  --fs-row-no: 0.72rem;
-  --fs-row-name: clamp(1.5rem, 2.8vw, 2.25rem);
+  /* Type scale. Exactly four sizes on the page (TasteSkill pass, Oct 2026):
+       lead   the one loud line (serif)
+       entry  names in the Now list, section heads (serif)
+       text   17px, all running text and chrome
+       small  13px, legal lines, labels, footer. Nothing smaller.
+     The legacy names below all point at one of those four. */
+  --fs-text: 1.0625rem;
+  --fs-small: 0.8125rem;
+  --fs-body: 1.0625rem;
+  --fs-mark-name: 1.0625rem;
+  --fs-mark-legal: 0.8125rem;
+  --fs-locales: 0.8125rem;
+  --fs-colophon: clamp(1.5rem, 2.3vw, 2.1rem);
+  --fs-note: 1.0625rem;
+  --fs-label: 0.8125rem;
+  --fs-row-no: 0.8125rem;
+  --fs-row-name: clamp(1.5rem, 2.3vw, 2.1rem);
   --fs-row-meta: 0.8125rem;
-  --fs-row-arrow: 0.8rem;
-  --fs-foot: 0.82rem;
+  --fs-row-arrow: 0.8125rem;
+  --fs-foot: 0.8125rem;
   /* Display tier: the lead is the page. Serif, large, set tight. */
   --fs-lead: clamp(2.5rem, 5vw, 4.5rem);
-  --fs-identity: clamp(1.05rem, 1.45vw, 1.25rem);
+  --fs-identity: 1.0625rem;
   --fs-entry: clamp(1.5rem, 2.3vw, 2.1rem);
 
   /* Spacing */

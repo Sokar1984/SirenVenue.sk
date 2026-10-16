@@ -1,7 +1,13 @@
+import Image, { type StaticImageData } from "next/image";
 import { notFound } from "next/navigation";
 import { isLocale, message } from "@/modules/i18n";
 import { getHomepageCopy } from "@/modules/content";
 import { Chrome } from "./layout";
+// Real stills, bundled at build time (static imports, never a runtime read of
+// public/). DOT. Gallery: a crop of the current exhibition visual from
+// dotgallery.sk. BlinkLive: its own published brand image (og.png).
+import dotStill from "./img/dot-gallery-still.jpg";
+import blinkStill from "./img/blinklive-still.jpg";
 
 type Entry = {
   name: string;
@@ -9,6 +15,9 @@ type Entry = {
   note: string | null;
   href?: string;
   live?: boolean;
+  still?: StaticImageData;
+  /** No real picture exists: a typographic mark stands in, never a fake. */
+  glyph?: string;
 };
 
 /**
@@ -52,14 +61,21 @@ export default async function Home({
       role: client,
       note: message(locale, "home.dot"),
       href: "https://dotgallery.sk",
+      still: dotStill,
     },
-    { name: "COMMA gallery", role: client, note: message(locale, "home.comma") },
+    {
+      name: "COMMA gallery",
+      role: client,
+      note: message(locale, "home.comma"),
+      glyph: ",",
+    },
     {
       name: "BlinkLive",
       role: own,
       note: copy.blink ?? message(locale, "home.blink"),
       href: "https://blinklive.app",
       live: true,
+      still: blinkStill,
     },
   ];
 
@@ -83,38 +99,47 @@ export default async function Home({
           {identity ? <p className="identity">{identity}</p> : null}
         </section>
 
+        {/* The Now list. No numbers, no rules, no tracked caps: space and the
+            serif names carry the rhythm. The role is a quiet sentence-case
+            word ahead of the note. A still sits in its own column so every
+            name shares one left edge, with or without a picture. */}
         <section className="now" aria-labelledby="now-label">
           {now ? (
-            <h2 id="now-label" className="label now-label">
+            <h2 id="now-label" className="visually-hidden">
               {now}
             </h2>
           ) : null}
-          <ol className="ledger">
+          <ul className="ledger">
             {entries.map((entry, i) => {
               const inner = (
                 <>
-                  <span className="ledger-no" aria-hidden="true">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <span className="ledger-name">
-                    {entry.name}
-                    {entry.live ? (
-                      <span className="live-point" aria-hidden="true" />
+                  <span
+                    className={entry.still || entry.glyph ? "ledger-still has-mark" : "ledger-still"}
+                    aria-hidden="true"
+                  >
+                    {entry.glyph ? <span className="ledger-glyph">{entry.glyph}</span> : null}
+                    {entry.still ? (
+                      <Image
+                        src={entry.still}
+                        alt=""
+                        sizes="(min-width: 1024px) 7rem, 5rem"
+                        priority={i === 0}
+                        placeholder="blur"
+                      />
                     ) : null}
                   </span>
-                  <span className="ledger-meta">
-                    {entry.role ? (
-                      <span className="ledger-role">{entry.role}</span>
-                    ) : null}
-                    {entry.note ? (
-                      <span className="ledger-note">{entry.note}</span>
-                    ) : null}
-                  </span>
-                  {entry.href ? (
-                    <span className="ledger-arrow" aria-hidden="true">
-                      ↗
+                  <span className="ledger-text">
+                    <span className="ledger-name">
+                      {entry.name}
+                      {entry.live ? (
+                        <span className="live-point" aria-hidden="true" />
+                      ) : null}
                     </span>
-                  ) : null}
+                    <span className="ledger-meta">
+                      {entry.role ? <span className="ledger-role">{entry.role}.</span> : null}{" "}
+                      {entry.note ? <span className="ledger-note">{entry.note}</span> : null}
+                    </span>
+                  </span>
                 </>
               );
               return (
@@ -137,22 +162,21 @@ export default async function Home({
             {next ? (
               <li className="ledger-row is-open">
                 <div className="ledger-entry">
-                  <span className="ledger-no" aria-hidden="true">
-                    {String(entries.length + 1).padStart(2, "0")}
+                  <span className="ledger-still" aria-hidden="true" />
+                  <span className="ledger-text">
+                    <span className="ledger-name ledger-next">{next}</span>
                   </span>
-                  <span className="ledger-name ledger-next">{next}</span>
                 </div>
               </li>
             ) : null}
-          </ol>
+          </ul>
         </section>
 
-        {/* How we work: plain reading text in the same two-column rhythm as
-            the ledger. Label left, measure-width prose right, then the short
-            list of what that can mean, set as a quiet run of words. */}
-        <section className="now how" aria-labelledby="how-label">
+        {/* How we work: a serif section head at entry size, then plain prose
+            at text size. The services follow as a short sentence-case list. */}
+        <section className="how" aria-labelledby="how-label">
           {how ? (
-            <h2 id="how-label" className="label now-label">
+            <h2 id="how-label" className="how-title">
               {how}
             </h2>
           ) : null}
@@ -162,7 +186,7 @@ export default async function Home({
             ))}
             {services.length > 0 ? (
               <div className="how-services">
-                {servicesLabel ? <h3 className="label">{servicesLabel}</h3> : null}
+                {servicesLabel ? <h3 className="how-services-title">{servicesLabel}</h3> : null}
                 <ul>
                   {services.map((item) => (
                     <li key={item}>{item}</li>
