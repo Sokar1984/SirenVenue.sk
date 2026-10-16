@@ -25,7 +25,7 @@
   /* Reveal — a line of the lead rises out of its own mask, once, on load.
      Staggered by the page with --i. Opacity is never animated from zero so
      text is always readable if the animation never runs. */
-  --m-reveal: m-reveal var(--motion-reveal) both;
+  --m-reveal: m-reveal var(--motion-reveal) backwards;
 
   /* Live — the BlinkLive point breathes. The only looping motion on the site,
      and it means something: the camera is live. */
@@ -55,8 +55,8 @@
 
 @keyframes m-reveal {
   from {
-    transform: translateY(0.35em);
-    opacity: 0.35;
+    transform: translateY(18px);
+    opacity: 0.3;
   }
   to {
     transform: translateY(0);
@@ -65,12 +65,14 @@
 }
 
 @keyframes m-live {
-  0%,
-  100% {
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--signal) 45%, transparent);
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
   }
-  60% {
-    box-shadow: 0 0 0 0.45rem color-mix(in srgb, var(--signal) 0%, transparent);
+  70%,
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
   }
 }
 

@@ -49,7 +49,7 @@ a:not(.row-link):not(.ledger-entry):not(.mark-name):hover {
   top: 0;
   left: 0;
   width: 1px;
-  height: 1px;
+  height: 1px; /* taste-skill-ignore: visually-hidden skip link, not a rule */
   overflow: hidden;
   clip: rect(0 0 0 0);
   clip-path: inset(50%);
@@ -131,7 +131,6 @@ a:not(.row-link):not(.ledger-entry):not(.mark-name):hover {
   flex-wrap: wrap;
   gap: 0.9rem;
   font-size: var(--fs-locales);
-  letter-spacing: 0.14em;
 }
 
 .locale {
@@ -154,10 +153,18 @@ a:not(.row-link):not(.ledger-entry):not(.mark-name):hover {
   text-wrap: balance;
 }
 
-/* ---- home (site v3) ----
-   One loud thing (the serif lead), one quiet line, then a ledger. Rhythm comes
-   from two spacing values only: --section-gap between movements, hairlines
-   inside them. Nothing is boxed. */
+/* ---- home ----
+   Two loud things only: the serif lead and the serif names. Everything else
+   is text size or small. Rhythm is space, never lines. */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
 
 .home {
   gap: var(--section-gap);
@@ -182,131 +189,97 @@ a:not(.row-link):not(.ledger-entry):not(.mark-name):hover {
 
 .lead-line {
   display: block;
-  animation: var(--m-reveal);
 }
 
-/* Second sentence answers the first: set in italic, indented one step, and
-   arriving a beat later. The turn is the whole message. */
 .lead-line-2 {
   font-style: italic;
   color: var(--muted);
-  padding-left: clamp(1.5rem, 8vw, 7.5rem);
-  animation-delay: 0.14s;
+  padding-left: clamp(1rem, 4vw, 3.5rem);
 }
 
 .identity {
   margin: 0;
   max-width: var(--measure);
-  margin-left: clamp(1.5rem, 8vw, 7.5rem);
-  font-size: var(--fs-identity);
+  padding-left: clamp(1rem, 4vw, 3.5rem);
+  font-size: var(--fs-text);
   line-height: 1.55;
-  color: var(--muted);
+  color: var(--fg);
   text-wrap: pretty;
-  animation: var(--m-reveal);
-  animation-delay: 0.28s;
-}
-
-.now {
-  display: grid;
-  grid-template-columns: minmax(0, 11rem) minmax(0, 1fr);
-  gap: 1rem clamp(1.5rem, 4vw, 3rem);
-  align-items: start;
-}
-
-.now-label {
-  margin: 0;
-  padding-top: 1.35rem;
-  font-weight: 500;
 }
 
 .ledger {
   list-style: none;
   margin: 0;
   padding: 0;
-  border-top: 1px solid var(--line);
-}
-
-.ledger-row {
-  border-bottom: 1px solid var(--line);
+  display: grid;
+  gap: clamp(0.9rem, 1.8vw, 1.4rem);
 }
 
 .ledger-entry {
   display: grid;
-  grid-template-columns: 2.25rem minmax(0, 1fr) 1.5rem;
-  grid-template-areas:
-    "no name arrow"
-    ". meta meta";
-  column-gap: clamp(0.6rem, 1.5vw, 1.25rem);
-  row-gap: 0.45rem;
-  align-items: baseline;
-  padding: clamp(0.7rem, 1.4vw, 1rem) 0;
+  grid-template-columns: 5rem minmax(0, 1fr);
+  column-gap: clamp(0.9rem, 1.6vw, 1.25rem);
+  align-items: center;
   text-decoration: none;
 }
 
-.ledger-no {
-  grid-area: no;
-  font-size: var(--fs-row-no);
-  letter-spacing: 0.1em;
-  font-variant-numeric: tabular-nums;
-  color: var(--dim);
+.ledger-still {
+  display: block;
+  width: 5rem;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.ledger-still.has-mark {
+  background: var(--lift);
+}
+
+/* COMMA has no picture of its own, so its name's own mark stands in: a
+   serif comma set large on the tone step. */
+.ledger-glyph {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  font-family: var(--font-serif), var(--font-serif-fallback);
+  font-size: var(--fs-lead);
+  line-height: 0;
+  color: var(--fg);
+  transform: translateY(-0.28em);
+}
+
+.ledger-still img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--motion-fast);
+}
+
+.ledger-text {
+  display: grid;
+  gap: 0.25rem;
 }
 
 .ledger-name {
-  grid-area: name;
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.6rem;
   font-family: var(--font-serif), var(--font-serif-fallback);
   font-size: var(--fs-entry);
   line-height: 1.05;
   letter-spacing: -0.01em;
-  transition: transform var(--motion-fast);
+  transition: transform var(--motion-fast), color var(--motion-fast);
 }
 
 .ledger-meta {
-  grid-area: meta;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem 0.9rem;
-  font-size: var(--fs-row-meta);
-  line-height: 1.5;
-}
-
-.ledger-role {
-  color: var(--dim);
-  font-size: var(--fs-label);
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  transform: translateY(-0.05em);
-}
-
-.ledger-note {
+  font-size: var(--fs-small);
+  line-height: 1.45;
   color: var(--muted);
 }
 
-.ledger-arrow {
-  grid-area: arrow;
-  justify-self: end;
-  color: var(--dim);
-  font-size: var(--fs-row-arrow);
-  transition: color var(--motion-fast), transform var(--motion-fast);
-}
-
-.ledger-entry.is-link:hover .ledger-name,
-.ledger-entry.is-link:focus-visible .ledger-name {
-  transform: translateX(0.3rem);
-}
-
-.ledger-entry.is-link:hover .ledger-arrow,
-.ledger-entry.is-link:focus-visible .ledger-arrow {
+.ledger-role {
   color: var(--fg);
-  transform: translate(0.15rem, -0.15rem);
-}
-
-/* The open line: numbered like the rest, but italic, dim and unruled at the
-   bottom, so the list reads as continuing rather than finished. */
-.ledger-row.is-open {
-  border-bottom: none;
 }
 
 .ledger-next {
@@ -314,28 +287,152 @@ a:not(.row-link):not(.ledger-entry):not(.mark-name):hover {
   color: var(--dim);
 }
 
+/* Hover and focus: the name steps right, the still leans in. */
+.ledger-entry.is-link:hover .ledger-name,
+.ledger-entry.is-link:focus-visible .ledger-name {
+  transform: translateX(0.3rem);
+}
+
+.ledger-entry.is-link:hover .ledger-still img,
+.ledger-entry.is-link:focus-visible .ledger-still img {
+  transform: scale(1.06);
+}
+
+.ledger-entry.is-link:hover .ledger-meta {
+  color: var(--fg);
+}
+
 .live-point {
+  position: relative;
   flex: none;
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 50%;
   background: var(--signal);
+}
+
+/* The live ring breathes with transform and opacity only. */
+.live-point::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--signal);
   animation: var(--m-live);
 }
 
-@media (max-width: 720px) {
-  .now {
-    grid-template-columns: minmax(0, 1fr);
+.how {
+  display: grid;
+  gap: 1rem;
+}
+
+.how-title {
+  margin: 0;
+  font-family: var(--font-serif), var(--font-serif-fallback);
+  font-weight: 400;
+  font-size: var(--fs-entry);
+  line-height: 1.05;
+}
+
+.how-body {
+  display: grid;
+  gap: 1rem;
+}
+
+.how-body p {
+  margin: 0;
+  max-width: 62ch;
+  font-size: var(--fs-text);
+  line-height: 1.6;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+.how-body p:first-child {
+  color: var(--fg);
+}
+
+.how-services {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.how-services-title {
+  margin: 0;
+  font-size: var(--fs-text);
+  font-weight: 500;
+  color: var(--fg);
+}
+
+.how-services ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.2rem;
+  font-size: var(--fs-text);
+  color: var(--muted);
+}
+
+/* Entrance: each section's parts arrive in order, 70ms apart. Content is
+   never hidden: the reveal starts at partial opacity and only travels. */
+.lead-line,
+.identity,
+.ledger-row,
+.how-title,
+.how-body > * {
+  animation: var(--m-reveal);
+}
+
+.lead-line-2 { animation-delay: 70ms; }
+.identity { animation-delay: 140ms; }
+.ledger-row:nth-child(1) { animation-delay: 120ms; }
+.ledger-row:nth-child(2) { animation-delay: 190ms; }
+.ledger-row:nth-child(3) { animation-delay: 260ms; }
+.ledger-row:nth-child(4) { animation-delay: 330ms; }
+.how-title { animation-delay: 300ms; }
+.how-body > :nth-child(1) { animation-delay: 370ms; }
+.how-body > :nth-child(2) { animation-delay: 440ms; }
+.how-body > :nth-child(3) { animation-delay: 510ms; }
+.how-body > :nth-child(4) { animation-delay: 580ms; }
+.how-body > :nth-child(5) { animation-delay: 650ms; }
+
+@media (min-width: 1024px) {
+  .home {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: clamp(2.5rem, 5vw, 5rem);
+    row-gap: var(--section-gap);
+    align-items: start;
+    align-content: start;
   }
 
-  .now-label {
-    padding-top: 0;
+  .ledger-entry {
+    grid-template-columns: 6.5rem minmax(0, 1fr);
   }
 
-  .lead-line-2,
-  .identity {
-    padding-left: 0;
-    margin-left: 0;
+  .ledger-still {
+    width: 6.5rem;
+  }
+
+  .how {
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: clamp(2.5rem, 5vw, 5rem);
+    align-items: start;
+  }
+
+  .how-body {
+    display: block;
+    column-count: 2;
+    column-gap: clamp(2rem, 3.5vw, 3rem);
+    grid-column: 1 / -1;
+  }
+
+  .how-body > p,
+  .how-body > div {
+    break-inside: avoid;
+    margin-bottom: 1rem;
   }
 }
 
@@ -382,13 +479,6 @@ main {
   flex-direction: column;
 }
 
-.index {
-  border-top: 1px solid var(--line);
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
 .index-head {
   display: flex;
   justify-content: space-between;
@@ -396,125 +486,17 @@ main {
   padding: 0.85rem 0.25rem;
 }
 
+/* Labels are sentence case at the small size. No tracked capitals. */
 .label {
   font-size: var(--fs-label);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
   color: var(--dim);
-}
-
-.rows {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  animation: var(--m-view-enter);
-}
-
-.row {
-  flex: 1;
-  display: flex;
-}
-
-.row + .row {
-  border-top: 1px solid var(--line);
-}
-
-/* One left-anchored two-line block. Line one is number + name with the arrow
-   sitting on the name's own line, a single gap after a fixed-width name track
-   so it reads as the name's affordance and aligns vertically across rows. The
-   name track is fixed (not `max-content`) precisely so the arrows share one
-   x-position instead of drifting right with each longer name. Line two is role
-   and descriptor as one metadata sentence, indented to the name's column. The
-   row's right side stays deliberately empty. */
-.row-link {
-  --row-name-track: 17.5rem;
-  flex: 1;
-  display: grid;
-  grid-template-columns: max-content var(--row-name-track) max-content;
-  grid-template-areas:
-    "no name arrow"
-    ". meta meta";
-  align-items: baseline;
-  align-content: center;
-  column-gap: clamp(0.6rem, 1vw, 1rem);
-  row-gap: 0.4rem;
-  padding: 1.4rem 0.25rem;
-  transition: var(--m-row-lift);
-  text-decoration: none;
-}
-
-.row-link:hover {
-  background: var(--lift);
-}
-
-.row-no {
-  grid-area: no;
-  color: var(--dim);
-  font-size: var(--fs-row-no);
-  letter-spacing: 0.1em;
-  font-variant-numeric: tabular-nums;
-}
-
-.row-name {
-  grid-area: name;
-  font-size: var(--fs-row-name);
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  transition: transform var(--motion-fast);
-}
-
-.row-link:hover .row-name {
-  transform: translateX(0.25rem);
-}
-
-.row-meta {
-  grid-area: meta;
-  display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
-  color: var(--muted);
-  font-size: var(--fs-row-meta);
-  line-height: 1.4;
-}
-
-.row-role {
-  color: var(--muted);
-}
-
-.row-descriptor {
-  color: var(--dim);
-}
-
-/* Only joins a role that precedes it; when the descriptor stands alone
-   (its words already carry the role) it gets no separator. */
-.row-role + .row-descriptor::before {
-  content: "·";
-  margin-right: 0.5rem;
-  color: var(--dim);
-}
-
-.row-arrow {
-  grid-area: arrow;
-  justify-self: end;
-  color: var(--dim);
-  font-size: var(--fs-row-arrow);
-  transition: color var(--motion-fast), transform var(--motion-fast);
-}
-
-.row-link:hover .row-arrow {
-  color: var(--fg);
-  transform: translate(0.2rem, -0.2rem);
 }
 
 /* ---- foot ---- */
 
 .foot {
   margin-top: auto;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--line);
+  padding-top: clamp(1.5rem, 3vw, 2.25rem);
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -536,28 +518,6 @@ main {
 
 .legal {
   color: var(--dim);
-}
-
-/* ---- narrow ---- */
-
-@media (max-width: 720px) {
-  /* Phone keeps the same two-line block: name + arrow, then metadata beneath.
-     Only the desktop index flexes to fill the viewport. */
-  .row {
-    flex: none;
-  }
-
-  .row-link {
-    grid-template-columns: 2.25rem minmax(0, 1fr) 1.25rem;
-    column-gap: 0.6rem;
-    row-gap: 0.3rem;
-    align-content: normal;
-    padding: 1rem 0.25rem;
-  }
-
-  .row-meta {
-    flex-wrap: wrap;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -646,7 +606,7 @@ main {
   border: 1px solid var(--line);
   border-radius: 6px;
   background: var(--bg);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55); /* taste-skill-ignore: open menu floats */
 }
 
 .lang-option {
@@ -758,50 +718,6 @@ main {
   color: var(--muted);
 }
 
-/* ---- how we work (home) ---- */
-
-.how-body {
-  display: grid;
-  gap: 1.1rem;
-  max-width: 38rem;
-  padding-top: 1.1rem;
-  border-top: 1px solid var(--line);
-}
-
-.how-body p {
-  margin: 0;
-  color: var(--muted);
-  font-size: var(--fs-identity);
-  line-height: 1.6;
-  text-wrap: pretty;
-}
-
-.how-body p:first-child {
-  color: var(--fg);
-}
-
-.how-services {
-  display: grid;
-  gap: 0.6rem;
-  margin-top: 1rem;
-}
-
-.how-services h3 {
-  margin: 0;
-  font-weight: 500;
-}
-
-.how-services ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-  gap: 0.4rem 2rem;
-  font-family: var(--font-serif), var(--font-serif-fallback);
-  font-size: var(--fs-identity);
-}
-
 /* ---- inner pages (about, privacy) ---- */
 
 .page {
@@ -854,8 +770,8 @@ main {
 .page-aside {
   display: grid;
   gap: 1rem;
-  padding-top: 1.1rem;
-  border-top: 1px solid var(--line);
+  padding: 1.1rem 1.25rem;
+  background: var(--lift);
 }
 
 .page-aside h2 {
@@ -886,8 +802,8 @@ main {
 }
 
 .prose .facts {
-  padding: 0.9rem 0;
-  border-block: 1px solid var(--line);
+  padding: 1rem 1.25rem;
+  background: var(--lift);
 }
 
 /* ---- footer nav ---- */
@@ -905,7 +821,6 @@ main {
   flex-wrap: wrap;
   gap: 0.35rem 0.9rem;
   font-size: var(--fs-locales);
-  letter-spacing: 0.14em;
 }
 
 .lang-link {
@@ -922,62 +837,3 @@ main {
   }
 }
 
-/* ---- home on wide screens: one screen, no empty viewports ----
-   The opening and the ledger sit side by side; "How we work" runs underneath
-   in two text columns. Nothing gets a min-height. */
-@media (min-width: 1024px) {
-  .home {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    column-gap: clamp(2.5rem, 5vw, 5rem);
-    row-gap: var(--section-gap);
-    align-items: start;
-    align-content: start;
-  }
-
-  .home > .now:not(.how) {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0.6rem;
-  }
-
-  .home > .now:not(.how) .now-label {
-    padding-top: 0;
-  }
-
-  .lead-line-2,
-  .identity {
-    padding-left: clamp(1rem, 4vw, 3.5rem);
-  }
-
-  .identity {
-    margin-left: 0;
-  }
-
-  .how {
-    grid-column: 1 / -1;
-    grid-template-columns: minmax(0, 9rem) minmax(0, 1fr);
-  }
-
-  .how-body {
-    max-width: none;
-    display: block;
-    column-count: 2;
-    column-gap: clamp(2rem, 4vw, 3.5rem);
-  }
-
-  .how-body p {
-    font-size: var(--fs-note);
-    margin-bottom: 0.9rem;
-    break-inside: avoid;
-  }
-
-  .how-services {
-    break-inside: avoid;
-    margin-top: 0;
-  }
-
-  .how-services ul {
-    grid-template-columns: minmax(0, 1fr);
-    font-size: var(--fs-note);
-  }
-}
